@@ -1,0 +1,43 @@
+@import 'src/styles/variables';
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+@mixin column {
+  flex-direction: column;
+  height: 100%;
+}
+
+.posts {
+  @include column;
+  flex: 1;
+  overflow: auto;
+
+  padding: 10px;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.post {
+  padding-top: 10px;
+  padding-bottom: 40px;
+
+  &:hover {
+    background-color: $lightGrayColor;
+    cursor: pointer;
+  }
+}
+
+.selectedPost {
+  background-color: $lightGrayColor;
+  border: 1px solid $darkBlueColor;
+}
+
+.comments {
+  @include column;
+  width: 50%;
+}

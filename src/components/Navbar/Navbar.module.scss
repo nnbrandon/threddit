@@ -1,0 +1,30 @@
+@import 'src/styles/variables';
+
+.sidebar {
+  //   position: absolute;
+  color: $lightGrayColor;
+  left: 0;
+  height: 100%;
+  width: 280px;
+  background: $darkBlueColor;
+}
+
+.nav {
+  list-style: none;
+
+  li {
+    padding: 10px;
+  }
+
+  a {
+    color: #fff;
+    border: 3px solid #fff;
+    text-align: center;
+    font-weight: 900;
+    font-size: 18px;
+    display: block;
+    text-decoration: none;
+    padding: 5px 0;
+    margin: 0 20px;
+  }
+}

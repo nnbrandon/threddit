@@ -1,0 +1,18 @@
+@import 'src/styles/variables';
+
+.container {
+  border-left: 2px solid $darkBlueColor;
+  height: 100%;
+  padding: 10px;
+  overflow: auto;
+}
+
+.closeButton {
+  float: right;
+}
+
+.textHtml {
+  p {
+    margin-top: 10px;
+  }
+}
