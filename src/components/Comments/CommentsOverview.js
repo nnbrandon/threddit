@@ -1,33 +1,66 @@
-import React from 'react';
-import he from 'he';
+import React, { useEffect, useState } from 'react';
 
 import styles from './Comments.module.scss';
+import PostSection from './PostSection';
+import CommentsList from './CommentsList';
+import { fetchComments } from '../../Reddit/comments';
 
-function CommentsOverview({ selectedPost, onCloseComments }) {
-  const { title, score, num_comments, commentsUrl } = selectedPost;
-  const prefixedAuthor = selectedPost.getPrefixedAuthor();
-  const date = selectedPost.timeSince();
+function getCommentsUrlJSON(subreddit, postId) {
+  return `https://www.reddit.com/r/${subreddit}/comments/${postId}.json`;
+}
 
-  let text;
-  if (selectedPost.text_html) {
-    text = he.decode(selectedPost.text_html);
-  }
+function CommentsOverview({
+  subreddit,
+  postId,
+  selectedPost,
+  onCloseComments,
+}) {
+  const [comments, setComments] = useState([]);
+  const [post, setPost] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    document.addEventListener('keydown', onCloseComments);
+    return () => {
+      document.removeEventListener('keydown', onCloseComments);
+      console.log('clean');
+    };
+  }, []);
+
+  // TODO: FIX MEMORY LEAK AROUND subreddit & postId
+  useEffect(() => {
+    setComments([]);
+    setPost(undefined);
+    setLoading(true);
+
+    async function fetch() {
+      const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
+
+      const fetchPost = !selectedPost ? true : false;
+      try {
+        const { post, comments } = await fetchComments(
+          commentsUrlJSON,
+          fetchPost,
+        );
+        setComments(comments);
+
+        if (fetchPost) {
+          setPost(post);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    }
+    fetch();
+  }, [subreddit, postId, selectedPost]);
+
+  const p = selectedPost || post;
   return (
     <div className={styles.container}>
-      <button className={styles.closeButton} onClick={onCloseComments}>
-        X
-      </button>
-      <div>
-        Posted by {prefixedAuthor} {date}
-      </div>
-      <h3>{title}</h3>
-      <div
-        className={styles.textHtml}
-        dangerouslySetInnerHTML={{ __html: text }}
-      />
-      <div>{score}</div>
-      <div>{num_comments} comments</div>
+      <PostSection post={p} onCloseComments={onCloseComments} />
+      <hr />
+      <CommentsList comments={comments} />
     </div>
   );
 }

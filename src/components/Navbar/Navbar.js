@@ -1,30 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import styles from './Navbar.module.scss';
 
-function Navbar() {
+function Navbar({ navData }) {
+  const renderNavData = navData.map((data, index) => {
+    return (
+      <li key={index}>
+        <Link to={data.path}>{data.text}</Link>
+      </li>
+    );
+  });
+
   return (
     <div className={styles.sidebar}>
       <nav className={styles.nav}>
-        <ul>
-          <li>
-            <a href="#">/r/Frontend</a>
-          </li>
-          <li>
-            <a href="#">/r/javascript</a>
-          </li>
-          <li>
-            <a href="#">/r/node</a>
-          </li>
-          <li>
-            <a href="#">/r/reactjs</a>
-          </li>
-          <li>
-            <a href="#">/r/webdev</a>
-          </li>
-          <li>
-            <a href="#">/r/all</a>
-          </li>
-        </ul>
+        <ul>{renderNavData}</ul>
       </nav>
     </div>
   );

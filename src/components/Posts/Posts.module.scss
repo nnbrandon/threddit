@@ -16,6 +16,7 @@
   overflow: auto;
 
   padding: 10px;
+  padding-bottom: 60px;
 
   a {
     text-decoration: none;
@@ -23,8 +24,10 @@
 }
 
 .post {
-  padding-top: 10px;
-  padding-bottom: 40px;
+  padding: 10px 0px 10px 10px;
+  border: 1px solid $darkBlueColor;
+  margin-bottom: 20px;
+  border-radius: 5px;
 
   &:hover {
     background-color: $lightGrayColor;

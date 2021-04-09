@@ -4,7 +4,7 @@ import styles from './Header.module.scss';
 function Header() {
   return (
     <header className={styles.header}>
-      <div>header</div>
+      <div>threddit</div>
     </header>
   );
 }

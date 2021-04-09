@@ -1,8 +1,8 @@
 import React from 'react';
-import Dashboard from './Dashboard/Dashboard';
+import ThredditRouter from './ThredditRouter';
 
 function App() {
-  return <Dashboard />;
+  return <ThredditRouter />;
 }
 
 export default App;

@@ -30,7 +30,7 @@ export class Post {
   }
 
   getCommentsUrlJSON() {
-    return `${this.commentsUrl}.json`;
+    return `https://www.reddit.com/${this.subreddit_name_prefixed}/comments/${this.id}.json`;
   }
 
   timeSince() {

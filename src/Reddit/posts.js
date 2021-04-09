@@ -3,13 +3,16 @@ import axios from 'axios';
 import { Post } from './post';
 
 export async function fetchPosts(subreddit, after) {
+  if (!subreddit) {
+    subreddit = 'all';
+  }
   let result;
   try {
     result = await axios.get(
-      `https://www.reddit.com/r/${subreddit}.json?after=${after}`,
+      `https://www.reddit.com/r/${subreddit}.json?after=${after}&limit=15`,
     );
     console.log(result);
-    if (result.status != 200) {
+    if (result.status !== 200) {
       throw new Error(`Unable to fetch posts for ${subreddit}`);
     }
   } catch (err) {
