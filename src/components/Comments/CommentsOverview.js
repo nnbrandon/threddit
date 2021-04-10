@@ -10,14 +10,17 @@ function getCommentsUrlJSON(subreddit, postId) {
 }
 
 function CommentsOverview({
-  subreddit,
-  postId,
+  // subreddit,
+  // postId,
   selectedPost,
   onCloseComments,
+  match,
 }) {
   const [comments, setComments] = useState([]);
   const [post, setPost] = useState(undefined);
   const [loading, setLoading] = useState(false);
+  console.log(match);
+  const { postId, subreddit } = match.params;
 
   useEffect(() => {
     document.addEventListener('keydown', onCloseComments);
@@ -55,7 +58,7 @@ function CommentsOverview({
       setLoading(false);
     }
     fetch();
-  }, [subreddit, postId, selectedPost]);
+  }, [match]);
 
   const spinner = loading ? 'Loading comments...' : undefined;
 

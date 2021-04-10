@@ -12,11 +12,9 @@ function PostsView({ subreddit }) {
   const [selectedPost, setSelectedPost] = useState(undefined);
   const [nextAfter, setNextAfter] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showComments, setShowComments] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    setShowComments(false);
     setSelectedPost(undefined);
     setPosts([]);
     setLoading(true);
@@ -38,13 +36,11 @@ function PostsView({ subreddit }) {
   function onClickPost(post) {
     console.log(post);
     setSelectedPost(post);
-    setShowComments(true);
   }
 
   function onCloseComments(event) {
     if (event.keyCode === 27 || event.type === 'click') {
       setSelectedPost(undefined);
-      setShowComments(false);
 
       if (!subreddit) {
         history.push('/');
@@ -67,23 +63,6 @@ function PostsView({ subreddit }) {
     );
   });
 
-  let commentsOverview;
-  if (selectedPost && showComments) {
-    const id = selectedPost.id;
-    commentsOverview = (
-      <div className={styles.comments}>
-        <Route path="/r/:subreddit/comments/:postId">
-          <CommentsOverview
-            subreddit={selectedPost.getLowerCasedSubreddit()}
-            postId={id}
-            selectedPost={selectedPost}
-            onCloseComments={onCloseComments}
-          />
-        </Route>
-      </div>
-    );
-  }
-
   const spinner = loading ? 'Loading...' : undefined;
 
   return (
@@ -94,7 +73,16 @@ function PostsView({ subreddit }) {
         {renderedPosts}
         {spinner}
       </div>
-      {commentsOverview}
+      <Route
+        path="/r/:subreddit/comments/:postId"
+        render={(props) => (
+          <CommentsOverview
+            {...props}
+            selectedPost={selectedPost}
+            onCloseComments={onCloseComments}
+          />
+        )}
+      />
     </div>
   );
 }
