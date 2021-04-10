@@ -29,8 +29,8 @@ export class Post {
     return `u/${this.author}`;
   }
 
-  getCommentsUrlJSON() {
-    return `https://www.reddit.com/${this.subreddit_name_prefixed}/comments/${this.id}.json`;
+  getLowerCasedSubreddit() {
+    return this.subreddit.toLowerCase();
   }
 
   timeSince() {

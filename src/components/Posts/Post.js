@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Posts.module.scss';
 
 function Post({ post, selected, onClickPost }) {
@@ -16,15 +17,20 @@ function Post({ post, selected, onClickPost }) {
     ? `${styles.post} ${styles.selectedPost}`
     : styles.post;
   return (
-    <article className={articleStyle} onClick={() => onClickPost(post)}>
-      <div>
-        Posted by {prefixedAuthor} {date}
-      </div>
-      <h3>{title}</h3>
-      {thumbnail}
-      <div>{score}</div>
-      <div>{num_comments} comments</div>
-    </article>
+    <Link
+      className={styles.link}
+      to={`/r/${post.subreddit}/comments/${post.id}`}
+    >
+      <article className={articleStyle} onClick={() => onClickPost(post)}>
+        <div>
+          Posted by {prefixedAuthor} {date}
+        </div>
+        <h3>{title}</h3>
+        {thumbnail}
+        <div>{score}</div>
+        <div>{num_comments} comments</div>
+      </article>
+    </Link>
   );
 }
 

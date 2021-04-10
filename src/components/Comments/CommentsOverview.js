@@ -23,6 +23,8 @@ function CommentsOverview({
     document.addEventListener('keydown', onCloseComments);
     return () => {
       document.removeEventListener('keydown', onCloseComments);
+      setComments([]);
+      setPost(undefined);
       console.log('clean');
     };
   }, []);
@@ -55,11 +57,14 @@ function CommentsOverview({
     fetch();
   }, [subreddit, postId, selectedPost]);
 
+  const spinner = loading ? 'Loading comments...' : undefined;
+
   const p = selectedPost || post;
   return (
     <div className={styles.container}>
       <PostSection post={p} onCloseComments={onCloseComments} />
       <hr />
+      {spinner}
       <CommentsList comments={comments} />
     </div>
   );

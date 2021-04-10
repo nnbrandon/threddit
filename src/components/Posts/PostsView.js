@@ -1,43 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import styles from './Posts.module.scss';
 import Post from './Post';
 import CommentsOverview from '../Comments/CommentsOverview';
 
 import { fetchPosts } from '../../Reddit/posts';
+import { Route, useHistory } from 'react-router';
 
-function getPostId(pathname) {
-  const pathArr = pathname.split('/');
-  if (pathArr[3]) {
-    return pathArr[3];
-  }
-  return undefined;
-}
-
-function getSubreddit(pathname) {
-  if (pathname === '/') {
-    return 'all';
-  }
-
-  const pathArr = pathname.split('/');
-  if (pathArr[2]) {
-    return pathArr[2];
-  }
-  return undefined;
-}
-
-function PostsView() {
-  const location = useLocation();
-  const { pathname } = location;
-  const subreddit = getSubreddit(pathname);
-  const postId = getPostId(pathname);
-
+function PostsView({ subreddit }) {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(undefined);
   const [nextAfter, setNextAfter] = useState('');
   const [loading, setLoading] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setShowComments(false);
@@ -69,6 +45,12 @@ function PostsView() {
     if (event.keyCode === 27 || event.type === 'click') {
       setSelectedPost(undefined);
       setShowComments(false);
+
+      if (!subreddit) {
+        history.push('/');
+      } else {
+        history.push(`${subreddit}`);
+      }
     }
   }
 
@@ -86,24 +68,20 @@ function PostsView() {
   });
 
   let commentsOverview;
-  if ((selectedPost || postId) && showComments) {
-    // TODO: SUPER UGLY HACKAROUND, DOES NOT HAVE POSTID CASE EITHER
-    if (
-      selectedPost &&
-      (selectedPost.subreddit === subreddit || subreddit === 'all')
-    ) {
-      const id = postId || selectedPost.id;
-      commentsOverview = (
-        <div className={styles.comments}>
+  if (selectedPost && showComments) {
+    const id = selectedPost.id;
+    commentsOverview = (
+      <div className={styles.comments}>
+        <Route path="/r/:subreddit/comments/:postId">
           <CommentsOverview
-            subreddit={subreddit}
+            subreddit={selectedPost.getLowerCasedSubreddit()}
             postId={id}
             selectedPost={selectedPost}
             onCloseComments={onCloseComments}
           />
-        </div>
-      );
-    }
+        </Route>
+      </div>
+    );
   }
 
   const spinner = loading ? 'Loading...' : undefined;

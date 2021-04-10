@@ -15,8 +15,8 @@ function mockNavData() {
       text: '/r/javascript',
     },
     {
-      path: '/r/Frontend',
-      text: '/r/Frontend',
+      path: '/r/frontend',
+      text: '/r/frontend',
     },
     {
       path: '/r/reactjs',
@@ -51,18 +51,23 @@ function mockNavData() {
 
 function Dashboard() {
   const [navData, setNavData] = useState([]);
+  const [subreddit, setSubreddit] = useState('');
 
   useEffect(() => {
     const navData = mockNavData();
     setNavData(navData);
   }, []);
 
+  function onClickSubreddit(subreddit) {
+    setSubreddit(subreddit);
+  }
+
   return (
     <main className={styles.container}>
-      <Navbar navData={navData} />
+      <Navbar navData={navData} onClickSubreddit={onClickSubreddit} />
       <div className={styles.content}>
         <Header />
-        <DashboardRouter />
+        <DashboardRouter subreddit={subreddit} />
       </div>
     </main>
   );

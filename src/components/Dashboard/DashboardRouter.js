@@ -2,13 +2,14 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import PostsView from '../Posts/PostsView';
+import CommentsOverview from '../Comments/CommentsOverview';
 
-function DashboardRouter() {
+function DashboardRouter({ subreddit }) {
   return (
     <Switch>
       <Route
-        path={['/', '/r/:subreddit', '/r/:subreddit/:id']}
-        component={PostsView}
+        path={['/', '/r/:subreddit']}
+        render={() => <PostsView subreddit={subreddit} />}
       />
     </Switch>
   );
