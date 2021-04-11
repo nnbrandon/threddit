@@ -11,41 +11,40 @@ function getCommentsUrlJSON(subreddit, postId) {
 
 function CommentsOverview({ selectedPost, onCloseComments, match }) {
   const [comments, setComments] = useState([]);
-  const [post, setPost] = useState(undefined);
+  const [fetchedPost, setFetchedPost] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const { postId, subreddit } = match.params;
+  const getPost =
+    !selectedPost || (selectedPost && selectedPost.id !== postId)
+      ? true
+      : false;
+  const post = getPost ? fetchedPost : selectedPost;
 
   useEffect(() => {
     document.addEventListener('keydown', onCloseComments);
     return () => {
       document.removeEventListener('keydown', onCloseComments);
       setComments([]);
-      setPost(undefined);
-      console.log('clean');
+      setFetchedPost(undefined);
     };
   }, []);
 
   useEffect(() => {
     setComments([]);
-    setPost(undefined);
+    setFetchedPost(undefined);
     setLoading(true);
 
     async function fetch() {
       const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
-
-      const fetchPost =
-        !selectedPost || (selectedPost && selectedPost.id !== postId)
-          ? true
-          : false;
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
-          fetchPost,
+          getPost,
         );
         setComments(comments);
 
-        if (fetchPost) {
-          setPost(post);
+        if (getPost) {
+          setFetchedPost(post);
         }
       } catch (err) {
         console.error(err);
@@ -53,14 +52,13 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
       setLoading(false);
     }
     fetch();
-  }, [selectedPost, subreddit, postId]);
+  }, [subreddit, postId]);
 
   const spinner = loading ? 'Loading comments...' : undefined;
 
-  const p = post || selectedPost; // prioritize post
   return (
     <div className={styles.container}>
-      <PostSection post={p} onCloseComments={onCloseComments} />
+      <PostSection post={post} onCloseComments={onCloseComments} />
       <hr />
       {spinner}
       <CommentsList comments={comments} />

@@ -14,6 +14,9 @@ function PostsView({ match, isHome }) {
   const [nextAfter, setNextAfter] = useState('');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const commentsPath = isHome
+    ? '/home/r/:subreddit/comments/:postId'
+    : '/r/:subreddit/comments/:postId';
 
   useEffect(() => {
     async function fetch() {
@@ -68,14 +71,11 @@ function PostsView({ match, isHome }) {
   });
 
   const spinner = loading ? 'Loading...' : undefined;
-  const commentsPath = isHome
-    ? '/home/r/:subreddit/comments/:postId'
-    : '/r/:subreddit/comments/:postId';
-
+  const subredditText = isHome ? undefined : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
       <div className={styles.posts}>
-        <div>{subreddit}</div>
+        {subredditText}
         <br />
         {renderedPosts}
         {spinner}
