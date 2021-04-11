@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './Navbar.module.scss';
 
-function Navbar({ navData, onClickSubreddit }) {
+function Navbar({ navData }) {
   const renderNavData = navData.map((data, index) => {
     return (
       <li key={index}>
@@ -14,13 +14,7 @@ function Navbar({ navData, onClickSubreddit }) {
 
   return (
     <div className={styles.sidebar}>
-      <nav
-        className={styles.nav}
-        onClick={(event) => {
-          const subreddit = event.target.getAttribute('href');
-          onClickSubreddit(subreddit);
-        }}
-      >
+      <nav className={styles.nav}>
         <ul>{renderNavData}</ul>
       </nav>
     </div>

@@ -10,19 +10,42 @@ export class Post {
     this.subreddit_id = data.subreddit_id;
     this.subreddit_name_prefixed = data.subreddit_name_prefixed;
     this.title = data.title;
-    this.commentsUrl = data.url;
+    this.url = data.url;
     this.num_comments = data.num_comments;
     this.text = data.selftext;
     this.text_html = data.selftext_html;
+    this.preview = data.preview;
+    this.is_video = data.is_video;
 
     this.thumbnail =
-      data.thumbnail_height && data.thumbnail_width
+      data.url && data.thumbnail_height && data.thumbnail_width
         ? {
             url: data.thumbnail,
             height: data.thumbnail_height,
             width: data.thumbnail_width,
           }
         : undefined;
+  }
+
+  getPreviewSource() {
+    if (
+      this.preview &&
+      this.preview.images &&
+      this.preview.images.length > 0 &&
+      !this.is_video
+    ) {
+      // return this.preview.images[0].source; // height, width, url
+      const { source } = this.preview.images[0];
+      if (!source) {
+        return undefined;
+      }
+      return {
+        height: source.height,
+        width: source.width,
+        url: source.url.replace('amp;', ''),
+      };
+    }
+    return undefined;
   }
 
   getPrefixedAuthor() {

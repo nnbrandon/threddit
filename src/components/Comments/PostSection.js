@@ -9,13 +9,24 @@ function PostSection({ post, onCloseComments }) {
     const { title, score, num_comments } = post;
     const prefixedAuthor = post.getPrefixedAuthor();
     const date = post.timeSince();
-    let text;
-    if (post && post.text_html) {
-      text = he.decode(post.text_html);
-    }
+    const previewSource = post.getPreviewSource();
+
+    const text = post.text_html ? he.decode(post.text_html) : undefined;
+    const url = post.url ? (
+      <a href={post.url} target="_blank">
+        {post.url}
+      </a>
+    ) : undefined;
+    const preview = previewSource ? (
+      <img
+        className={styles.previewImg}
+        src={previewSource.url}
+        alt={`${post.subreddit_name_prefixed} - ${post.title}`}
+      />
+    ) : undefined;
 
     renderPostSection = (
-      <div>
+      <div className={styles.postSection}>
         <button className={styles.closeButton} onClick={onCloseComments}>
           X
         </button>
@@ -23,6 +34,9 @@ function PostSection({ post, onCloseComments }) {
           Posted by {prefixedAuthor} {date}
         </div>
         <h3>{title}</h3>
+        {url}
+        <br />
+        {preview}
         <div
           className={styles.textHtml}
           dangerouslySetInnerHTML={{ __html: text }}

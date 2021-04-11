@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Route, useHistory } from 'react-router';
 
 import styles from './Posts.module.scss';
 import Post from './Post';
 import CommentsOverview from '../Comments/CommentsOverview';
 
 import { fetchPosts } from '../../Reddit/posts';
-import { Route, useHistory } from 'react-router';
 
-function PostsView({ subreddit }) {
+function PostsView({ match, isHome }) {
+  const { subreddit } = match.params;
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(undefined);
   const [nextAfter, setNextAfter] = useState('');
@@ -15,10 +16,6 @@ function PostsView({ subreddit }) {
   const history = useHistory();
 
   useEffect(() => {
-    setSelectedPost(undefined);
-    setPosts([]);
-    setLoading(true);
-
     async function fetch() {
       try {
         const { posts, nextAfter } = await fetchPosts(subreddit, nextAfter);
@@ -26,11 +23,18 @@ function PostsView({ subreddit }) {
         setNextAfter(nextAfter);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
 
+    setSelectedPost(undefined);
+    setPosts([]);
+    setLoading(true);
     fetch();
+
+    return () => {
+      console.log('unmounted postsview');
+    };
   }, [subreddit]);
 
   function onClickPost(post) {
@@ -41,11 +45,10 @@ function PostsView({ subreddit }) {
   function onCloseComments(event) {
     if (event.keyCode === 27 || event.type === 'click') {
       setSelectedPost(undefined);
-
-      if (!subreddit) {
-        history.push('/');
+      if (isHome) {
+        history.push('/home');
       } else {
-        history.push(`${subreddit}`);
+        history.push(`/r/${subreddit}`);
       }
     }
   }
@@ -54,6 +57,7 @@ function PostsView({ subreddit }) {
     const selected = selectedPost && post.id === selectedPost.id;
     return (
       <Post
+        isHome={isHome}
         key={post.id}
         post={post}
         selected={selected}
@@ -64,6 +68,9 @@ function PostsView({ subreddit }) {
   });
 
   const spinner = loading ? 'Loading...' : undefined;
+  const commentsPath = isHome
+    ? '/home/r/:subreddit/comments/:postId'
+    : '/r/:subreddit/comments/:postId';
 
   return (
     <div className={styles.container}>
@@ -74,7 +81,7 @@ function PostsView({ subreddit }) {
         {spinner}
       </div>
       <Route
-        path="/r/:subreddit/comments/:postId"
+        path={commentsPath}
         render={(props) => (
           <CommentsOverview
             {...props}

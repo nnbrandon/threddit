@@ -4,14 +4,22 @@
   flex-direction: column;
   border-left: 2px solid $darkBlueColor;
   height: 100%;
-  width: 50%;
+  width: 65%;
   padding: 10px;
   overflow: auto;
 }
 
+.postSection {
+  width: 100%;
+}
+
 .closeButton {
-  position: sticky;
   float: right;
+}
+
+.previewImg {
+  max-height: 700px;
+  max-width: 700px;
 }
 
 .textHtml {

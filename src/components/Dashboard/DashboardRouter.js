@@ -1,15 +1,21 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import PostsView from '../Posts/PostsView';
-import CommentsOverview from '../Comments/CommentsOverview';
 
-function DashboardRouter({ subreddit }) {
+function DashboardRouter() {
   return (
     <Switch>
+      <Route exact path="/">
+        <Redirect to="/home" />
+      </Route>
       <Route
-        path={['/', '/r/:subreddit']}
-        render={() => <PostsView subreddit={subreddit} />}
+        path={'/home'}
+        render={(props) => <PostsView {...props} isHome={true} />}
+      />
+      <Route
+        path={'/r/:subreddit'}
+        render={(props) => <PostsView {...props} isHome={false} />}
       />
     </Switch>
   );

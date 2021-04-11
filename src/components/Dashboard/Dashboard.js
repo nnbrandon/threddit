@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../Navbar/Navbar';
 import Header from '../Header/Header';
 import DashboardRouter from './DashboardRouter';
 import styles from './Dashboard.module.scss';
+import { useLocation } from 'react-router';
 
 function mockNavData() {
   return [
     {
-      path: '',
+      path: '/home',
       text: 'Home',
     },
     {
@@ -15,8 +16,8 @@ function mockNavData() {
       text: '/r/javascript',
     },
     {
-      path: '/r/frontend',
-      text: '/r/frontend',
+      path: '/r/Frontend',
+      text: '/r/Frontend',
     },
     {
       path: '/r/reactjs',
@@ -31,6 +32,10 @@ function mockNavData() {
       text: '/r/wildrift',
     },
     {
+      path: '/r/leagueoflegends',
+      text: '/r/leagueoflegends',
+    },
+    {
       path: '/r/wallstreetbets',
       text: '/r/wallstreetbets',
     },
@@ -43,31 +48,26 @@ function mockNavData() {
       text: '/r/wallstreetbets',
     },
     {
-      path: '/r/gme',
-      text: '/r/gme',
+      path: '/r/GME',
+      text: '/r/GME',
     },
   ];
 }
 
 function Dashboard() {
   const [navData, setNavData] = useState([]);
-  const [subreddit, setSubreddit] = useState('');
 
   useEffect(() => {
     const navData = mockNavData();
     setNavData(navData);
   }, []);
 
-  function onClickSubreddit(subreddit) {
-    setSubreddit(subreddit);
-  }
-
   return (
     <main className={styles.container}>
-      <Navbar navData={navData} onClickSubreddit={onClickSubreddit} />
+      <Navbar navData={navData} />
       <div className={styles.content}>
         <Header />
-        <DashboardRouter subreddit={subreddit} />
+        <DashboardRouter />
       </div>
     </main>
   );
