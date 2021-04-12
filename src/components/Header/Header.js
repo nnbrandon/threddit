@@ -5,6 +5,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <div>threddit</div>
+      <input type="search" />
     </header>
   );
 }

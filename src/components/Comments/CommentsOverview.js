@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import styles from './Comments.module.scss';
 import PostSection from './PostSection';
@@ -14,6 +14,8 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
   const [fetchedPost, setFetchedPost] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const { postId, subreddit } = match.params;
+  const scrollTopRef = useRef();
+
   const getPost =
     !selectedPost || (selectedPost && selectedPost.id !== postId)
       ? true
@@ -30,12 +32,9 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
   }, []);
 
   useEffect(() => {
-    setComments([]);
-    setFetchedPost(undefined);
-    setLoading(true);
-
     async function fetch() {
       const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
+      setLoading(true);
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
@@ -52,12 +51,19 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
       setLoading(false);
     }
     fetch();
+
+    return () => {
+      setComments([]);
+      setFetchedPost(undefined);
+      // Scroll to top after subreddit and postId change
+      scrollTopRef.current.scrollTo(0, 0);
+    };
   }, [subreddit, postId]);
 
   const spinner = loading ? 'Loading comments...' : undefined;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={scrollTopRef}>
       <PostSection post={post} onCloseComments={onCloseComments} />
       <hr />
       {spinner}

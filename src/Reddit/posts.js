@@ -2,14 +2,14 @@ import axios from 'axios';
 
 import { Post } from './post';
 
-export async function fetchPosts(subreddit, after) {
+export async function fetchPosts(subreddit, currentAfter) {
   if (!subreddit) {
     subreddit = 'all';
   }
   let result;
   try {
     result = await axios.get(
-      `https://www.reddit.com/r/${subreddit}.json?after=${after}&limit=15`,
+      `https://www.reddit.com/r/${subreddit}.json?after=${currentAfter}&limit=15`,
     );
     console.log(result);
     if (result.status !== 200) {

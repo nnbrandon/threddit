@@ -34,7 +34,6 @@ export class Post {
       this.preview.images.length > 0 &&
       !this.is_video
     ) {
-      // return this.preview.images[0].source; // height, width, url
       const { source } = this.preview.images[0];
       if (!source) {
         return undefined;

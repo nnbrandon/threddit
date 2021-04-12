@@ -9,34 +9,80 @@ import { fetchPosts } from '../../Reddit/posts';
 
 function PostsView({ match, isHome }) {
   const { subreddit } = match.params;
-  const [posts, setPosts] = useState([]);
+  const [postList, setPostList] = useState([]);
+  const [after, setAfter] = useState('');
   const [selectedPost, setSelectedPost] = useState(undefined);
-  const [nextAfter, setNextAfter] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fetchMore, setFetchMore] = useState(false);
   const history = useHistory();
+  const postsScrollRef = useRef();
+
   const commentsPath = isHome
     ? '/home/r/:subreddit/comments/:postId'
     : '/r/:subreddit/comments/:postId';
 
   useEffect(() => {
-    async function fetch() {
+    function scrollHandler() {
+      // postsScrollRef.current.scrollHeight !== document.scrollingElement.scrollHeight handles making sure
+      // fetchMore is not set to true when changing subreddits
+      if (
+        postsScrollRef.current.scrollTop +
+          postsScrollRef.current.clientHeight >=
+          postsScrollRef.current.scrollHeight &&
+        postsScrollRef.current.scrollHeight !==
+          document.scrollingElement.scrollHeight
+      ) {
+        setFetchMore(true);
+      }
+    }
+    postsScrollRef.current.addEventListener('scroll', scrollHandler);
+
+    return () => {
+      postsScrollRef.current.removeEventListener('scroll', scrollHandler);
+    };
+  }, []);
+
+  useEffect(() => {
+    async function loadMore(subreddit, after) {
+      if (!fetchMore) return;
+
+      setLoading(true);
       try {
-        const { posts, nextAfter } = await fetchPosts(subreddit, nextAfter);
-        setPosts(posts);
-        setNextAfter(nextAfter);
+        const { posts, nextAfter } = await fetchPosts(subreddit, after);
+        setPostList((prevPostList) => [...prevPostList, ...posts]);
+        setAfter(nextAfter);
+        setLoading(false);
+        setFetchMore(false);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    loadMore(subreddit, after);
+  }, [fetchMore]);
+
+  useEffect(() => {
+    async function fetch(subreddit, after) {
+      setLoading(true);
+      try {
+        const { posts, nextAfter } = await fetchPosts(subreddit, after);
+        setPostList(posts);
+        setAfter(nextAfter);
         setLoading(false);
       } catch (err) {
         console.error(err);
       }
     }
 
-    setSelectedPost(undefined);
-    setPosts([]);
-    setLoading(true);
-    fetch();
+    fetch(subreddit, '');
 
     return () => {
-      console.log('unmounted postsview');
+      setSelectedPost(undefined);
+      setPostList([]);
+      setAfter('');
+      setFetchMore(false);
+      setLoading(false);
+      console.log('subreddit changed in postsview');
     };
   }, [subreddit]);
 
@@ -56,7 +102,7 @@ function PostsView({ match, isHome }) {
     }
   }
 
-  const renderedPosts = posts.map((post) => {
+  const renderedPosts = postList.map((post) => {
     const selected = selectedPost && post.id === selectedPost.id;
     return (
       <Post
@@ -74,7 +120,7 @@ function PostsView({ match, isHome }) {
   const subredditText = isHome ? undefined : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
-      <div className={styles.posts}>
+      <div className={styles.posts} ref={postsScrollRef}>
         {subredditText}
         <br />
         {renderedPosts}
