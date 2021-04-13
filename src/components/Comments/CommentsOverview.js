@@ -50,13 +50,14 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
       }
       setLoading(false);
     }
-    fetch();
+
+    // Scroll to top after subreddit and postId change
+    scrollTopRef.current.scrollTo(0, 0);
+    fetch(subreddit, postId);
 
     return () => {
       setComments([]);
       setFetchedPost(undefined);
-      // Scroll to top after subreddit and postId change
-      scrollTopRef.current.scrollTo(0, 0);
     };
   }, [subreddit, postId]);
 

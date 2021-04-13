@@ -45,6 +45,7 @@ function PostsView({ match, isHome }) {
   useEffect(() => {
     async function loadMore(subreddit, after) {
       if (!fetchMore) return;
+      if (after === null || after === undefined) return;
 
       setLoading(true);
       try {

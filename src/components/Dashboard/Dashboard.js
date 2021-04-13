@@ -3,7 +3,6 @@ import Navbar from '../Navbar/Navbar';
 import Header from '../Header/Header';
 import DashboardRouter from './DashboardRouter';
 import styles from './Dashboard.module.scss';
-import { useLocation } from 'react-router';
 
 function mockNavData() {
   return [
@@ -14,6 +13,10 @@ function mockNavData() {
     {
       path: '/r/javascript',
       text: '/r/javascript',
+    },
+    {
+      path: '/r/JSdev',
+      text: '/r/JSdev',
     },
     {
       path: '/r/Frontend',
