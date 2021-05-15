@@ -1,12 +1,13 @@
 @import 'src/styles/variables';
 
 .sidebar {
-  //   position: absolute;
+  // position: absolute;
   color: $lightGrayColor;
-  left: 0;
+  // left: 0;
   height: 100%;
   width: 250px;
   background: $darkBlueColor;
+  overflow: visible scroll;
 }
 
 .nav {

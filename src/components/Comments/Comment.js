@@ -1,5 +1,6 @@
 import React from 'react';
 import he from 'he';
+import styles from './Comments.module.scss';
 
 function Comment({ comment }) {
   const { score, body_html, id, depth } = comment;
@@ -12,15 +13,13 @@ function Comment({ comment }) {
   }
 
   return (
-    <div key={id}>
+    <div className={styles.comment} key={id}>
       <div>
         Posted by {prefixedAuthor} {date}
       </div>
       <div>{score}</div>
       <div>Comment depth: {depth}</div>
       <div dangerouslySetInnerHTML={{ __html: text }} />
-      <br />
-      <br />
     </div>
   );
 }

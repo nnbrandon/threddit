@@ -1,11 +1,15 @@
 import React from 'react';
+
+import Search from './Search';
 import styles from './Header.module.scss';
 
-function Header() {
+function Header({ onClickHamburger }) {
   return (
     <header className={styles.header}>
-      <div>threddit</div>
-      <input type="search" />
+      <div className={styles.logo} onClick={onClickHamburger}>
+        threddit
+      </div>
+      <Search />
     </header>
   );
 }

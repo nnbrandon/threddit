@@ -11,6 +11,10 @@ function mockNavData() {
       text: 'Home',
     },
     {
+      path: '/r/technology',
+      text: '/r/technology',
+    },
+    {
       path: '/r/javascript',
       text: '/r/javascript',
     },
@@ -27,6 +31,14 @@ function mockNavData() {
       text: '/r/reactjs',
     },
     {
+      path: '/r/angular',
+      text: '/r/angular',
+    },
+    {
+      path: '/r/Angular2',
+      text: '/r/Angular2',
+    },
+    {
       path: '/r/webdev',
       text: '/r/webdev',
     },
@@ -39,6 +51,10 @@ function mockNavData() {
       text: '/r/leagueoflegends',
     },
     {
+      path: '/r/ffxiv',
+      text: '/r/ffxiv',
+    },
+    {
       path: '/r/wallstreetbets',
       text: '/r/wallstreetbets',
     },
@@ -47,17 +63,26 @@ function mockNavData() {
       text: '/r/stocks',
     },
     {
-      path: '/r/wallstreetbets',
-      text: '/r/wallstreetbets',
-    },
-    {
       path: '/r/GME',
       text: '/r/GME',
+    },
+    {
+      path: '/r/amcstock',
+      text: '/r/amcstock',
+    },
+    {
+      path: '/r/dogecoin',
+      text: '/r/dogecoin',
+    },
+    {
+      path: '/r/abmlstock',
+      text: '/r/abmlstock',
     },
   ];
 }
 
 function Dashboard() {
+  const [showNavBar, setShowNavBar] = useState(true);
   const [navData, setNavData] = useState([]);
 
   useEffect(() => {
@@ -65,11 +90,17 @@ function Dashboard() {
     setNavData(navData);
   }, []);
 
+  function onClickHamburger() {
+    setShowNavBar(!showNavBar);
+  }
+
   return (
     <main className={styles.container}>
-      <Navbar navData={navData} />
+      {showNavBar && (
+        <Navbar navData={navData} onClickHamburger={onClickHamburger} />
+      )}
       <div className={styles.content}>
-        <Header />
+        <Header onClickHamburger={onClickHamburger} />
         <DashboardRouter />
       </div>
     </main>

@@ -13,7 +13,7 @@
 .posts {
   @include column;
   flex: 1;
-  overflow: auto;
+  overflow: visible scroll;
 
   padding: 10px;
   padding-bottom: 60px;

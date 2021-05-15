@@ -9,6 +9,11 @@ module.exports = {
     filename: 'index_bundle.js',
   },
   devtool: 'eval-source-map',
+  devServer: {
+    host: '0.0.0.0',
+    historyApiFallback: true,
+    contentBase: './dist',
+  },
   module: {
     rules: [
       {
