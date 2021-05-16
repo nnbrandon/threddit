@@ -67,6 +67,7 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
     <div className={styles.container} ref={scrollTopRef}>
       <PostSection post={post} onCloseComments={onCloseComments} />
       <hr />
+      <br />
       {spinner}
       <CommentsList comments={comments} />
     </div>

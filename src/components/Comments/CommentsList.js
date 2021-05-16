@@ -7,7 +7,13 @@ function CommentsList({ comments }) {
     <Comment key={`${comment.id}${index}`} comment={comment} />
   ));
 
-  return <div>{renderedComments}</div>;
+  return (
+    <div>
+      {renderedComments}
+      <br />
+      <br />
+    </div>
+  );
 }
 
 export default CommentsList;

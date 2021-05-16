@@ -41,8 +41,9 @@ function PostSection({ post, onCloseComments }) {
           className={styles.textHtml}
           dangerouslySetInnerHTML={{ __html: text }}
         />
-        <div>{score}</div>
-        <div>{num_comments} comments</div>
+        <div>
+          {score} {num_comments} comments
+        </div>
       </div>
     );
   }
