@@ -4,7 +4,6 @@
   height: 100%;
   width: 250px;
   background: $darkBlueColor;
-  border-right: 1px solid black;
 
   overflow: auto;
 }
@@ -13,15 +12,16 @@
   list-style: none;
 
   li {
+    display: block;
     padding: 10px;
     &:hover {
-      border-color: $lightGrayColor;
+      background-color: $widgetColor;
       cursor: pointer;
     }
   }
 
   a {
-    color: #fff;
+    color: $fontColor;
     text-align: center;
     font-weight: 900;
     font-size: 18px;
