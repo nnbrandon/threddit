@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Posts.module.scss';
 
-function Post({ isHome, post, selected, onClickPost }) {
+function Post({ isHome, post, selected, onClickPost, style }) {
   const { title, score, num_comments, commentsUrl } = post;
   const prefixedAuthor = post.getPrefixedAuthor();
   const date = post.timeSince();
@@ -13,25 +13,26 @@ function Post({ isHome, post, selected, onClickPost }) {
   let thumbnail;
   if (post.thumbnail) {
     const { url, height, width } = post.thumbnail;
-    thumbnail = <img alt={title} src={url} />;
+    thumbnail = <img alt={title} src={url} width={width} height={height} />;
   }
 
   const subredditSection = isHome ? post.subreddit_name_prefixed : undefined;
 
-  const articleStyle = selected
-    ? `${styles.post} ${styles.selectedPost}`
-    : styles.post;
-
   return (
     <Link className={styles.link} to={commentsPath}>
-      <article className={articleStyle} onClick={() => onClickPost(post)}>
+      <article
+        className={styles.post}
+        onClick={() => onClickPost(post)}
+        style={style}
+      >
         <div>
           {subredditSection} Posted by {prefixedAuthor} {date}
         </div>
         <h3>{title}</h3>
         {thumbnail}
-        <div>{score}</div>
-        <div>{num_comments} comments</div>
+        <div>
+          {score} score | {num_comments} comments
+        </div>
       </article>
     </Link>
   );

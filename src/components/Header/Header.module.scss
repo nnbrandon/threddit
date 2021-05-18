@@ -1,17 +1,15 @@
+@import 'src/styles/variables';
+
 .header {
   display: flex;
   align-items: center;
-  // justify-content: center;
   flex: 1;
-  background: #eee;
+  background: $widgetColor;
+  color: $fontColor;
   height: 48px;
   position: sticky;
   padding: 10px;
   border-bottom: 1px solid black;
-}
-
-.logo {
-  // justify-content: flex-start;
 }
 
 .search {

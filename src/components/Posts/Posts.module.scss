@@ -3,6 +3,7 @@
 .container {
   display: flex;
   height: 100%;
+  background-color: $darkBlueColor;
 }
 
 @mixin column {
@@ -12,11 +13,12 @@
 
 .posts {
   @include column;
+  position: relative;
   flex: 1;
-  overflow: visible scroll;
 
-  padding: 10px;
-  padding-bottom: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 1%;
 
   a {
     text-decoration: none;
@@ -31,21 +33,17 @@
 .post {
   padding: 10px 0px 10px 10px;
   border: 1px solid $darkBlueColor;
-  margin-bottom: 20px;
   border-radius: 5px;
 
+  background-color: $widgetColor;
+
   &:hover {
-    background-color: $lightGrayColor;
+    border-color: $lightGrayColor;
     cursor: pointer;
   }
 }
 
 .selectedPost {
-  background-color: $lightGrayColor;
+  border-color: $lightGrayColor;
   border: 1px solid $darkBlueColor;
-}
-
-.comments {
-  @include column;
-  width: 50%;
 }

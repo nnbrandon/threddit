@@ -2,11 +2,18 @@
 
 .container {
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
   border-left: 2px solid $darkBlueColor;
   height: 100%;
-  width: 60%;
+  width: 100%;
   padding: 10px;
-  overflow: visible scroll;
+  overflow: auto;
+  background-color: $darkBlueColor;
+  z-index: 999;
 }
 
 .comment {

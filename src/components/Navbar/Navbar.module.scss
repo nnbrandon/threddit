@@ -1,13 +1,12 @@
 @import 'src/styles/variables';
 
 .sidebar {
-  // position: absolute;
-  color: $lightGrayColor;
-  // left: 0;
   height: 100%;
   width: 250px;
   background: $darkBlueColor;
-  overflow: visible scroll;
+  border-right: 1px solid black;
+
+  overflow: auto;
 }
 
 .nav {
@@ -15,11 +14,14 @@
 
   li {
     padding: 10px;
+    &:hover {
+      border-color: $lightGrayColor;
+      cursor: pointer;
+    }
   }
 
   a {
     color: #fff;
-    border: 3px solid #fff;
     text-align: center;
     font-weight: 900;
     font-size: 18px;
