@@ -42,7 +42,7 @@ function PostSection({ post, onCloseComments }) {
           dangerouslySetInnerHTML={{ __html: text }}
         />
         <div>
-          {score} {num_comments} comments
+          {score} score | {num_comments} comments
         </div>
       </div>
     );
