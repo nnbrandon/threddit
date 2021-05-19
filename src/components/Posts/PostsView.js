@@ -102,19 +102,18 @@ function PostsView({ match, isHome }) {
         setPostList((prevPostList) => [...prevPostList, ...posts]);
         setAfter(nextAfter);
 
-        setHasNextPage(true);
+        if (!nextAfter) {
+          setHasNextPage(false);
+        } else {
+          setHasNextPage(true);
+        }
+
         setIsNextPageLoading(false);
       } catch (err) {
         console.error(err);
       }
     }
     console.log('_loadNextPage', ...args);
-
-    const firstArg = args[0];
-    const secondArg = args[1];
-    if (firstArg === 0 && secondArg === 0) return;
-
-    if (after === null || after === undefined) return;
     setIsNextPageLoading(true);
     loadMore(subreddit, after);
   }
@@ -124,26 +123,12 @@ function PostsView({ match, isHome }) {
     : '/r/:subreddit/comments/:postId';
 
   useEffect(() => {
-    async function fetch(subreddit, after) {
-      try {
-        const { posts, nextAfter } = await fetchPosts(subreddit, after);
-        setPostList(posts);
-        setAfter(nextAfter);
-        // setIsNextPageLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    console.log('fetching');
-    // setIsNextPageLoading(true);
-    fetch(subreddit, '');
-
     return () => {
       setSelectedPost(undefined);
       setPostList([]);
       setAfter('');
       setIsNextPageLoading(false);
+      setHasNextPage(true);
       console.log('subreddit changed in postsview');
     };
   }, [subreddit]);

@@ -1,6 +1,6 @@
 import React from 'react';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { VariableSizeList as List } from 'react-window';
+import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Post from './Post';
@@ -33,15 +33,18 @@ function InfiniteScroll({
   // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
   const loadMoreItems = isNextPageLoading ? () => {} : loadNextPage;
 
-  const getItemSize = (index) => {
-    const post = postList[index];
-    if (post && post.thumbnail) {
-      const { height } = post.thumbnail;
-      return 150 + height;
-    }
+  // const getItemSize = (index) => {
+  //   if (!postList.length) {
+  //     return 0;
+  //   }
 
-    return 150;
-  };
+  //   const post = postList[index];
+  //   if (post && post.thumbnail) {
+  //     return 250;
+  //   }
+
+  //   return 200;
+  // };
 
   // Render an item or a loading indicator.
   const RenderedPost = ({ index, style }) => {
@@ -51,41 +54,43 @@ function InfiniteScroll({
       content = <div style={style}>Loading...</div>;
     } else {
       content = (
-        <Post
-          style={style}
-          isHome={isHome}
-          key={post.id}
-          post={post}
-          onClickPost={onClickPost}
-        />
+        <div style={style}>
+          <Post
+            isHome={isHome}
+            key={post.id}
+            post={post}
+            onClickPost={onClickPost}
+          />
+        </div>
       );
     }
     return content;
   };
 
   return (
-    <InfiniteLoader
-      isItemLoaded={isItemLoaded}
-      itemCount={itemCount}
-      loadMoreItems={loadMoreItems}
-    >
-      {({ onItemsRendered, ref }) => (
-        <AutoSizer>
-          {({ height, width }) => (
+    <AutoSizer>
+      {({ height, width }) => (
+        <InfiniteLoader
+          isItemLoaded={isItemLoaded}
+          itemCount={itemCount}
+          loadMoreItems={loadMoreItems}
+          threshold={10}
+        >
+          {({ onItemsRendered, ref }) => (
             <List
               itemCount={itemCount}
               onItemsRendered={onItemsRendered}
               ref={ref}
-              itemSize={getItemSize}
+              itemSize={250}
               height={height}
               width={width}
             >
               {RenderedPost}
             </List>
           )}
-        </AutoSizer>
+        </InfiniteLoader>
       )}
-    </InfiniteLoader>
+    </AutoSizer>
   );
 }
 
