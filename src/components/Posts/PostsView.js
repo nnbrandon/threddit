@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router';
-import { VariableSizeList as List } from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
 
 import styles from './Posts.module.scss';
-import Post from './Post';
 import Navbar from '../Navbar/Navbar';
 import CommentsOverview from '../Comments/CommentsOverview';
+import InfiniteScroll from './InfiniteScroll';
 
 import { fetchPosts } from '../../Reddit/posts';
 
@@ -92,77 +90,60 @@ function PostsView({ match, isHome }) {
   const [postList, setPostList] = useState([]);
   const [after, setAfter] = useState('');
   const [selectedPost, setSelectedPost] = useState(undefined);
-  const [loading, setLoading] = useState(false);
-  const [fetchMore, setFetchMore] = useState(false);
   const history = useHistory();
-  const postsScrollRef = useRef();
+
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [isNextPageLoading, setIsNextPageLoading] = useState(false);
+
+  function _loadNextPage(...args) {
+    async function loadMore(subreddit, after) {
+      try {
+        const { posts, nextAfter } = await fetchPosts(subreddit, after);
+        setPostList((prevPostList) => [...prevPostList, ...posts]);
+        setAfter(nextAfter);
+
+        setHasNextPage(true);
+        setIsNextPageLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    console.log('_loadNextPage', ...args);
+
+    const firstArg = args[0];
+    const secondArg = args[1];
+    if (firstArg === 0 && secondArg === 0) return;
+
+    if (after === null || after === undefined) return;
+    setIsNextPageLoading(true);
+    loadMore(subreddit, after);
+  }
 
   const commentsPath = isHome
     ? '/home/r/:subreddit/comments/:postId'
     : '/r/:subreddit/comments/:postId';
 
   useEffect(() => {
-    // function scrollHandler() {
-    //   // postsScrollRef.current.scrollHeight !== document.scrollingElement.scrollHeight handles making sure
-    //   // fetchMore is not set to true when changing subreddits
-    //   if (
-    //     postsScrollRef.current.scrollTop +
-    //       postsScrollRef.current.clientHeight >=
-    //       postsScrollRef.current.scrollHeight &&
-    //     postsScrollRef.current.scrollHeight !==
-    //       document.scrollingElement.scrollHeight
-    //   ) {
-    //     setFetchMore(true);
-    //   }
-    // }
-    // postsScrollRef.current.addEventListener('scroll', scrollHandler);
-
-    return () => {
-      // postsScrollRef.current.removeEventListener('scroll', scrollHandler);
-    };
-  }, []);
-
-  useEffect(() => {
-    async function loadMore(subreddit, after) {
-      if (!fetchMore) return;
-      if (after === null || after === undefined) return;
-
-      setLoading(true);
-      try {
-        const { posts, nextAfter } = await fetchPosts(subreddit, after);
-        setPostList((prevPostList) => [...prevPostList, ...posts]);
-        setAfter(nextAfter);
-        setLoading(false);
-        setFetchMore(false);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    loadMore(subreddit, after);
-  }, [fetchMore]);
-
-  useEffect(() => {
     async function fetch(subreddit, after) {
-      setLoading(true);
       try {
         const { posts, nextAfter } = await fetchPosts(subreddit, after);
         setPostList(posts);
         setAfter(nextAfter);
-        setLoading(false);
+        // setIsNextPageLoading(false);
       } catch (err) {
         console.error(err);
       }
     }
 
+    console.log('fetching');
+    // setIsNextPageLoading(true);
     fetch(subreddit, '');
 
     return () => {
       setSelectedPost(undefined);
       setPostList([]);
       setAfter('');
-      setFetchMore(false);
-      setLoading(false);
+      setIsNextPageLoading(false);
       console.log('subreddit changed in postsview');
     };
   }, [subreddit]);
@@ -183,30 +164,7 @@ function PostsView({ match, isHome }) {
     }
   }
 
-  const RenderedPost = ({ index, style }) => {
-    const post = postList[index];
-    return (
-      <Post
-        style={style}
-        isHome={isHome}
-        key={post.id}
-        post={post}
-        onClickPost={onClickPost}
-      />
-    );
-  };
-
-  const getItemSize = (index) => {
-    const post = postList[index];
-    if (post.thumbnail) {
-      const { height } = post.thumbnail;
-      return 120 + height;
-    }
-
-    return 150;
-  };
-
-  const subredditText = isHome ? undefined : <div>r/{subreddit}</div>;
+  const subredditText = isHome ? <div>Home</div> : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
       <Navbar navData={mockNavData()} />
@@ -224,18 +182,14 @@ function PostsView({ match, isHome }) {
         <br />
         {subredditText}
         <br />
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              itemSize={getItemSize}
-              itemCount={postList.length}
-              height={height}
-              width={width}
-            >
-              {RenderedPost}
-            </List>
-          )}
-        </AutoSizer>
+        <InfiniteScroll
+          isHome={isHome}
+          hasNextPage={hasNextPage}
+          isNextPageLoading={isNextPageLoading}
+          postList={postList}
+          loadNextPage={_loadNextPage}
+          onClickPost={onClickPost}
+        />
       </div>
     </div>
   );

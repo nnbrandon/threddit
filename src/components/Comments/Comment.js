@@ -17,9 +17,11 @@ function Comment({ comment }) {
       <div>
         Posted by {prefixedAuthor} {date}
       </div>
-      <div>{score}</div>
-      <div>Comment depth: {depth}</div>
       <div dangerouslySetInnerHTML={{ __html: text }} />
+      <br />
+      <div>
+        {score} score | Comment depth: {depth}
+      </div>
     </div>
   );
 }

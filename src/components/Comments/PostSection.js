@@ -1,5 +1,6 @@
 import React from 'react';
 import he from 'he';
+import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
 
 import styles from './Comments.module.scss';
 
@@ -27,20 +28,23 @@ function PostSection({ post, onCloseComments }) {
 
     renderPostSection = (
       <div className={styles.postSection}>
-        <button className={styles.closeButton} onClick={onCloseComments}>
-          X
-        </button>
+        <div className={styles.postSectionHeader}>
+          <IoIosArrowBack alt="Back" onClick={onCloseComments} size="30px" />
+          <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
+        </div>
         <div>
-          Posted by {prefixedAuthor} {date}
+          r/{post.subreddit} Posted by {prefixedAuthor} {date}
         </div>
         <h3>{title}</h3>
         {url}
         <br />
-        {preview}
+        <div className={styles.postSectionPreview}>{preview}</div>
         <div
           className={styles.textHtml}
           dangerouslySetInnerHTML={{ __html: text }}
         />
+
+        <br />
         <div>
           {score} score | {num_comments} comments
         </div>

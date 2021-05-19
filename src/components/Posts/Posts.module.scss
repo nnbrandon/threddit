@@ -43,6 +43,12 @@
   }
 }
 
+.thumbnail {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .selectedPost {
   border-color: $lightGrayColor;
   border: 1px solid $darkBlueColor;

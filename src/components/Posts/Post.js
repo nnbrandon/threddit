@@ -29,7 +29,7 @@ function Post({ isHome, post, selected, onClickPost, style }) {
           {subredditSection} Posted by {prefixedAuthor} {date}
         </div>
         <h3>{title}</h3>
-        {thumbnail}
+        <div className={styles.thumbnail}>{thumbnail}</div>
         <div>
           {score} score | {num_comments} comments
         </div>
