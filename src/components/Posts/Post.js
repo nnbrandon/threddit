@@ -13,7 +13,11 @@ function Post({ isHome, post, selected, onClickPost }) {
   let thumbnail;
   if (post.thumbnail) {
     const { url, height, width } = post.thumbnail;
-    thumbnail = <img src={url} width={width} height={height} />;
+    thumbnail = (
+      <div className={styles.thumbnail}>
+        <img src={url} width={width} height={height} />
+      </div>
+    );
   }
 
   const subredditSection = isHome ? post.subreddit_name_prefixed : undefined;
@@ -25,7 +29,7 @@ function Post({ isHome, post, selected, onClickPost }) {
           {subredditSection} Posted by {prefixedAuthor} {date}
         </div>
         <h3>{title}</h3>
-        <div className={styles.thumbnail}>{thumbnail}</div>
+        {thumbnail}
         <div>
           {score} score | {num_comments} comments
         </div>

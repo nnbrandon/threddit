@@ -109,6 +109,7 @@ function PostsView({ match, isHome }) {
         }
 
         setIsNextPageLoading(false);
+        console.log(postList);
       } catch (err) {
         console.error(err);
       }
@@ -168,6 +169,7 @@ function PostsView({ match, isHome }) {
         {subredditText}
         <br />
         <InfiniteScroll
+          subreddit={subreddit}
           isHome={isHome}
           hasNextPage={hasNextPage}
           isNextPageLoading={isNextPageLoading}

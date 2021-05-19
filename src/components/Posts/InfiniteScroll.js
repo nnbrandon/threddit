@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { FixedSizeList as List } from 'react-window';
+import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Post from './Post';
 import styles from './Posts.module.scss';
 
+function getNodeHeight(node) {
+  const clone = node.cloneNode(true);
+  // hide the meassured (cloned) element
+  clone.style.cssText = 'position:fixed; top:-9999px; opacity:0;';
+  // add the clone to the DOM
+  document.body.appendChild(clone);
+  // meassure it
+  const height = clone.clientHeight;
+  // cleaup
+  clone.parentNode.removeChild(clone);
+  return height;
+}
+
 function InfiniteScroll({
+  subreddit,
+
   isHome,
   // Are there more items to load?
   // (This information comes from the most recent API request.)
@@ -30,29 +45,59 @@ function InfiniteScroll({
   // Every row is loaded except for our loading indicator row.
   const isItemLoaded = (index) => !hasNextPage || index < postList.length;
 
+  const listRef = useRef(null);
+
   // Only load 1 page of items at a time.
   // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
   const loadMoreItems = isNextPageLoading ? () => {} : loadNextPage;
 
-  // const getItemSize = (index) => {
-  //   if (!postList.length) {
-  //     return 0;
-  //   }
+  useEffect(() => {
+    if (listRef.current) {
+      console.log(
+        'resetting since subreddit changed and VariableSizedList keeps a cache of dimensions for each index',
+      );
+      listRef.current.resetAfterIndex(0);
+    }
+  }, [subreddit]);
 
-  //   const post = postList[index];
-  //   if (post && post.thumbnail) {
-  //     return 250;
-  //   }
+  const getItemSize = (index) => {
+    if (!postList.length) {
+      return 0;
+    }
 
-  //   return 200;
-  // };
+    const post = postList[index];
+    if (!post) return 0;
+
+    const node = document.createElement('div');
+    const titleNode = document.createElement('h3');
+    const postedNode = document.createElement('div');
+    const metadataNode = document.createElement('div');
+
+    titleNode.innerText = post.title;
+    postedNode.innerText = `${post.subreddit} Posted by ${post.prefixedAuthor}`;
+    metadataNode.innerText = `${post.score} score | ${post.num_comments} comments`;
+
+    node.appendChild(titleNode);
+    node.appendChild(postedNode);
+    node.appendChild(metadataNode);
+
+    const nodeHeight = getNodeHeight(node);
+
+    const thumbnailHeight = post.thumbnail ? post.thumbnail.height + 10 : 0;
+
+    return 50 + nodeHeight + thumbnailHeight;
+  };
 
   // Render an item or a loading indicator.
   const RenderedPost = ({ index, style }) => {
     const post = postList[index];
     let content;
     if (!isItemLoaded(index)) {
-      content = <div style={style}>Loading...</div>;
+      content = (
+        <div style={style} className={styles.postWrapper}>
+          Loading...
+        </div>
+      );
     } else {
       content = (
         <div style={style} className={styles.postWrapper}>
@@ -81,8 +126,11 @@ function InfiniteScroll({
             <List
               itemCount={itemCount}
               onItemsRendered={onItemsRendered}
-              ref={ref}
-              itemSize={300}
+              ref={(list) => {
+                ref(list);
+                listRef.current = list;
+              }}
+              itemSize={getItemSize}
               height={height}
               width={width}
             >
