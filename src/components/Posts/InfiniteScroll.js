@@ -4,6 +4,7 @@ import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Post from './Post';
+import styles from './Posts.module.scss';
 
 function InfiniteScroll({
   isHome,
@@ -54,7 +55,7 @@ function InfiniteScroll({
       content = <div style={style}>Loading...</div>;
     } else {
       content = (
-        <div style={style}>
+        <div style={style} className={styles.postWrapper}>
           <Post
             isHome={isHome}
             key={post.id}
@@ -81,7 +82,7 @@ function InfiniteScroll({
               itemCount={itemCount}
               onItemsRendered={onItemsRendered}
               ref={ref}
-              itemSize={250}
+              itemSize={300}
               height={height}
               width={width}
             >

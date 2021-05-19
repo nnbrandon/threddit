@@ -30,8 +30,15 @@
   color: inherit;
 }
 
+.postWrapper {
+  display: flex;
+  flex: 1;
+  margin: 10px;
+}
+
 .post {
   height: 95%;
+  width: 100%;
   padding: 10px 0px 10px 10px;
   margin-left: 10%;
   margin-right: 10%;
