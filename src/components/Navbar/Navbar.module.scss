@@ -11,15 +11,6 @@
 .nav {
   list-style: none;
 
-  li {
-    display: block;
-    padding: 10px;
-    &:hover {
-      background-color: $widgetColor;
-      cursor: pointer;
-    }
-  }
-
   a {
     color: $fontColor;
     text-align: center;
@@ -27,7 +18,12 @@
     font-size: 18px;
     display: block;
     text-decoration: none;
-    padding: 5px 0;
+    padding: 20px;
     margin: 0 20px;
+
+    &:hover {
+      background-color: $widgetColor;
+      cursor: pointer;
+    }
   }
 }

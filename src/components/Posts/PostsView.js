@@ -200,7 +200,6 @@ function PostsView({ match, isHome }) {
     const post = postList[index];
     if (post.thumbnail) {
       const { height } = post.thumbnail;
-      console.log(height);
       return 120 + height;
     }
 
