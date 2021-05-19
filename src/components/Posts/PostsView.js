@@ -5,94 +5,18 @@ import styles from './Posts.module.scss';
 import Navbar from '../Navbar/Navbar';
 import CommentsOverview from '../Comments/CommentsOverview';
 import InfiniteScroll from './InfiniteScroll';
+import Spinner from '../Icons/Spinner';
 
 import { fetchPosts } from '../../Reddit/posts';
 
-function mockNavData() {
-  return [
-    {
-      path: '/home',
-      text: 'Home',
-    },
-    {
-      path: '/r/technology',
-      text: '/r/technology',
-    },
-    {
-      path: '/r/javascript',
-      text: '/r/javascript',
-    },
-    {
-      path: '/r/JSdev',
-      text: '/r/JSdev',
-    },
-    {
-      path: '/r/Frontend',
-      text: '/r/Frontend',
-    },
-    {
-      path: '/r/reactjs',
-      text: '/r/reactjs',
-    },
-    {
-      path: '/r/angular',
-      text: '/r/angular',
-    },
-    {
-      path: '/r/Angular2',
-      text: '/r/Angular2',
-    },
-    {
-      path: '/r/webdev',
-      text: '/r/webdev',
-    },
-    {
-      path: '/r/wildrift',
-      text: '/r/wildrift',
-    },
-    {
-      path: '/r/leagueoflegends',
-      text: '/r/leagueoflegends',
-    },
-    {
-      path: '/r/ffxiv',
-      text: '/r/ffxiv',
-    },
-    {
-      path: '/r/wallstreetbets',
-      text: '/r/wallstreetbets',
-    },
-    {
-      path: '/r/stocks',
-      text: '/r/stocks',
-    },
-    {
-      path: '/r/GME',
-      text: '/r/GME',
-    },
-    {
-      path: '/r/amcstock',
-      text: '/r/amcstock',
-    },
-    {
-      path: '/r/dogecoin',
-      text: '/r/dogecoin',
-    },
-    {
-      path: '/r/abmlstock',
-      text: '/r/abmlstock',
-    },
-  ];
-}
-
-function PostsView({ match, isHome }) {
+function PostsView({ match, isHome, subreddits }) {
   const { subreddit } = match.params;
   const [postList, setPostList] = useState([]);
   const [after, setAfter] = useState('');
   const [selectedPost, setSelectedPost] = useState(undefined);
   const history = useHistory();
 
-  const [hasNextPage, setHasNextPage] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [isNextPageLoading, setIsNextPageLoading] = useState(false);
 
   function _loadNextPage(...args) {
@@ -124,12 +48,32 @@ function PostsView({ match, isHome }) {
     : '/r/:subreddit/comments/:postId';
 
   useEffect(() => {
+    async function fetch(subreddit, after) {
+      try {
+        const { posts, nextAfter } = await fetchPosts(subreddit, after);
+        setPostList(posts);
+        setAfter(nextAfter);
+        if (!nextAfter) {
+          setHasNextPage(false);
+        } else {
+          setHasNextPage(true);
+        }
+
+        setIsNextPageLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    setIsNextPageLoading(true);
+    fetch(subreddit, '');
+
     return () => {
       setSelectedPost(undefined);
       setPostList([]);
       setAfter('');
       setIsNextPageLoading(false);
-      setHasNextPage(true);
+      setHasNextPage(false);
       console.log('subreddit changed in postsview');
     };
   }, [subreddit]);
@@ -150,10 +94,16 @@ function PostsView({ match, isHome }) {
     }
   }
 
+  const initialLoading = !after ? (
+    <div className={styles.loading}>
+      <Spinner />
+    </div>
+  ) : undefined;
+
   const subredditText = isHome ? <div>Home</div> : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
-      <Navbar navData={mockNavData()} />
+      <Navbar navData={subreddits} />
       <div className={styles.posts}>
         <Route
           path={commentsPath}
@@ -168,6 +118,7 @@ function PostsView({ match, isHome }) {
         <br />
         {subredditText}
         <br />
+        {initialLoading}
         <InfiniteScroll
           subreddit={subreddit}
           isHome={isHome}

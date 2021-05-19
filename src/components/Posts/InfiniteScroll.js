@@ -4,6 +4,7 @@ import { VariableSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Post from './Post';
+import Spinner from '../Icons/Spinner';
 import styles from './Posts.module.scss';
 
 function getNodeHeight(node) {
@@ -61,13 +62,11 @@ function InfiniteScroll({
   }, [subreddit]);
 
   const getItemSize = (index) => {
-    const post = postList[index];
-    if (!post) {
-      console.log(post);
-      console.log(index);
-      console.log(postList);
-      return 300;
+    if (!isItemLoaded(index)) {
+      return 150;
     }
+
+    const post = postList[index];
 
     const node = document.createElement('div');
     const titleNode = document.createElement('h3');
@@ -84,7 +83,7 @@ function InfiniteScroll({
 
     const nodeHeight = getNodeHeight(node);
 
-    const thumbnailHeight = post.thumbnail ? post.thumbnail.height + 10 : 0;
+    const thumbnailHeight = post.thumbnail ? post.thumbnail.height + 20 : 0;
 
     return 50 + nodeHeight + thumbnailHeight;
   };
@@ -95,8 +94,8 @@ function InfiniteScroll({
     let content;
     if (!isItemLoaded(index)) {
       content = (
-        <div style={style} className={styles.postWrapper}>
-          Loading...
+        <div style={style} className={`${styles.loading}`}>
+          <Spinner />
         </div>
       );
     } else {

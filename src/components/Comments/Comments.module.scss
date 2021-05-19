@@ -18,10 +18,16 @@ a {
   top: 0;
   height: 100%;
   width: 100%;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   overflow: auto;
   background-color: $darkBlueColor;
   z-index: 999;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .comment {
@@ -34,7 +40,7 @@ a {
 
 .postSection {
   width: 100%;
-  padding: 5px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
   background-color: $widgetColor;
@@ -44,6 +50,10 @@ a {
   display: flex;
   flex: 1;
   justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: $darkBlueColor;
 }
 
 .postSectionPreview {

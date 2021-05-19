@@ -40,9 +40,15 @@
   height: 100%;
 }
 
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .post {
   position: relative;
-  height: 95%;
+  height: 98%;
   // width: 100%;
   padding: 10px 0px 10px 10px;
   margin-left: 10%;

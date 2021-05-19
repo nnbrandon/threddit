@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
 
 import styles from './Comments.module.scss';
 import PostSection from './PostSection';
 import CommentsList from './CommentsList';
+import Spinner from '../Icons/Spinner';
 import { fetchComments } from '../../Reddit/comments';
 
 function getCommentsUrlJSON(subreddit, postId) {
@@ -61,10 +63,18 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
     };
   }, [subreddit, postId]);
 
-  const spinner = loading ? 'Loading comments...' : undefined;
+  const spinner = loading ? (
+    <div className={styles.loading}>
+      <Spinner />
+    </div>
+  ) : undefined;
 
   return (
     <div className={styles.container} ref={scrollTopRef}>
+      <div className={styles.postSectionHeader}>
+        <IoIosArrowBack alt="Back" onClick={onCloseComments} size="30px" />
+        <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
+      </div>
       <PostSection post={post} onCloseComments={onCloseComments} />
       <br />
       {spinner}

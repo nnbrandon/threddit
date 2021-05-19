@@ -28,10 +28,10 @@ function PostSection({ post, onCloseComments }) {
 
     renderPostSection = (
       <div className={styles.postSection}>
-        <div className={styles.postSectionHeader}>
+        {/* <div className={styles.postSectionHeader}>
           <IoIosArrowBack alt="Back" onClick={onCloseComments} size="30px" />
           <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
-        </div>
+        </div> */}
         <div>
           r/{post.subreddit} Posted by {prefixedAuthor} {date}
         </div>
