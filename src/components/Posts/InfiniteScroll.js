@@ -61,12 +61,13 @@ function InfiniteScroll({
   }, [subreddit]);
 
   const getItemSize = (index) => {
-    if (!postList.length) {
-      return 0;
-    }
-
     const post = postList[index];
-    if (!post) return 0;
+    if (!post) {
+      console.log(post);
+      console.log(index);
+      console.log(postList);
+      return 300;
+    }
 
     const node = document.createElement('div');
     const titleNode = document.createElement('h3');
@@ -120,7 +121,7 @@ function InfiniteScroll({
           isItemLoaded={isItemLoaded}
           itemCount={itemCount}
           loadMoreItems={loadMoreItems}
-          threshold={10}
+          threshold={8}
         >
           {({ onItemsRendered, ref }) => (
             <List
