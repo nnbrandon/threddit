@@ -18,10 +18,10 @@ a {
   top: 0;
   height: 100%;
   width: 100%;
-  padding: 0 10px 10px 10px;
+  padding: 0 10% 10px 10%;
   overflow: auto;
   background-color: $darkBlueColor;
-  z-index: 999;
+  z-index: 10;
 }
 
 .loading {
@@ -43,7 +43,9 @@ a {
   padding: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
+  border: 1px solid $darkBlueColor;
   background-color: $widgetColor;
+  border-radius: 5px;
 }
 
 .postSectionHeader {
