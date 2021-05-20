@@ -20,20 +20,21 @@ function PostsView({ match, isHome, subreddits }) {
   const [isNextPageLoading, setIsNextPageLoading] = useState(false);
 
   function _loadNextPage(...args) {
-    async function loadMore(subreddit, after) {
+    function loadMore(subreddit, after) {
       try {
-        const { posts, nextAfter } = await fetchPosts(subreddit, after);
-        setPostList((prevPostList) => [...prevPostList, ...posts]);
-        setAfter(nextAfter);
+        setTimeout(async () => {
+          const { posts, nextAfter } = await fetchPosts(subreddit, after);
+          setPostList((prevPostList) => [...prevPostList, ...posts]);
+          setAfter(nextAfter);
 
-        if (!nextAfter) {
-          setHasNextPage(false);
-        } else {
-          setHasNextPage(true);
-        }
+          if (!nextAfter) {
+            setHasNextPage(false);
+          } else {
+            setHasNextPage(true);
+          }
 
-        setIsNextPageLoading(false);
-        console.log(postList);
+          setIsNextPageLoading(false);
+        }, 500);
       } catch (err) {
         console.error(err);
       }
@@ -104,7 +105,7 @@ function PostsView({ match, isHome, subreddits }) {
   const subredditText = isHome ? <div>Home</div> : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
-      <Navbar navData={subreddits} />
+      <Navbar navData={subreddits} selectedSubreddit={subreddit} />
       <div className={styles.posts}>
         <Route
           path={commentsPath}

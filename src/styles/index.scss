@@ -17,6 +17,14 @@ body,
   color: $fontColor;
 }
 
+input,
+button,
+submit {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
 /* total width */
 ::-webkit-scrollbar {
   background-color: #fff;

@@ -5,11 +5,42 @@
   width: 250px;
   background: $darkBlueColor;
 
-  overflow: auto;
   border-right: 2px solid $widgetColor;
 }
 
+.add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.addButton {
+  color: $fontColor;
+  text-align: center;
+  font-weight: 900;
+  font-size: 18px;
+  display: block;
+  padding: 20px;
+  margin: 0 20px;
+  cursor: pointer;
+  background-color: $widgetColor;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: $anchorColor;
+  }
+}
+
+.selectedSubreddit {
+  color: $anchorColor !important;
+}
+
 .nav {
+  height: 60%;
+  overflow: auto;
+  border-bottom: 2px solid $widgetColor;
   list-style: none;
 
   a {
