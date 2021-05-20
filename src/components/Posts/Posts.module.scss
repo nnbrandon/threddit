@@ -56,8 +56,8 @@
 }
 
 .post {
-  height: 98%;
-  padding: 10px 0px 10px 10px;
+  height: 95%;
+  padding: 10px 5px 10px 10px;
   margin-left: 10%;
   margin-right: 10%;
   border: 1px solid $darkBlueColor;
@@ -68,6 +68,11 @@
   &:hover {
     border-color: $lightGrayColor;
     cursor: pointer;
+  }
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    margin-left: 5%;
+    margin-right: 5%;
   }
 }
 

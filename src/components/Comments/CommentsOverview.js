@@ -5,13 +5,21 @@ import styles from './Comments.module.scss';
 import PostSection from './PostSection';
 import CommentsList from './CommentsList';
 import Spinner from '../Icons/Spinner';
+import Hamburger from '../Icons/Hamburger';
+
 import { fetchComments } from '../../Reddit/comments';
 
 function getCommentsUrlJSON(subreddit, postId) {
   return `https://www.reddit.com/r/${subreddit}/comments/${postId}.json`;
 }
 
-function CommentsOverview({ selectedPost, onCloseComments, match }) {
+function CommentsOverview({
+  selectedPost,
+  onCloseComments,
+  match,
+  onCloseNav,
+  showNavBar,
+}) {
   const [comments, setComments] = useState([]);
   const [fetchedPost, setFetchedPost] = useState(undefined);
   const [loading, setLoading] = useState(false);
@@ -69,16 +77,20 @@ function CommentsOverview({ selectedPost, onCloseComments, match }) {
     </div>
   ) : undefined;
 
+  const hamburger = !showNavBar ? <Hamburger onClick={onCloseNav} /> : <span />;
+
   return (
     <div className={styles.container} ref={scrollTopRef}>
-      <div className={styles.postSectionHeader}>
-        <IoIosArrowBack alt="Back" onClick={onCloseComments} size="30px" />
-        <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
+      <div className={styles.commentsSection}>
+        <div className={styles.postSectionHeader}>
+          <span className={styles.hamburger}>{hamburger}</span>
+          <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
+        </div>
+        <PostSection post={post} onCloseComments={onCloseComments} />
+        <br />
+        {spinner}
+        <CommentsList comments={comments} />
       </div>
-      <PostSection post={post} onCloseComments={onCloseComments} />
-      <br />
-      {spinner}
-      <CommentsList comments={comments} />
     </div>
   );
 }

@@ -37,7 +37,7 @@ function PostsView({ match, isHome, subreddits }) {
           }
 
           setIsNextPageLoading(false);
-        }, 500);
+        }, 1000);
       } catch (err) {
         console.error(err);
       }
@@ -125,6 +125,8 @@ function PostsView({ match, isHome, subreddits }) {
           render={(props) => (
             <CommentsOverview
               {...props}
+              onCloseNav={onCloseNav}
+              showNavBar={showNavBar}
               selectedPost={selectedPost}
               onCloseComments={onCloseComments}
             />

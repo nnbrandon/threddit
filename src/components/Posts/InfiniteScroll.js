@@ -51,6 +51,7 @@ function InfiniteScroll({
 
   const listRef = useRef(null);
   const widthRef = useRef(null);
+  const loadingIndexRef = useRef(null);
 
   // Only load 1 page of items at a time.
   // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
@@ -62,11 +63,22 @@ function InfiniteScroll({
         'resetting since subreddit changed and VariableSizedList keeps a cache of dimensions for each index',
       );
       listRef.current.resetAfterIndex(0);
+      loadingIndexRef.current = null;
     }
   }, [subreddit]);
 
+  useEffect(() => {
+    console.log(
+      'postList changed with loadingIndexRef = ' + loadingIndexRef.current,
+    );
+    if (loadingIndexRef.current) {
+      listRef.current.resetAfterIndex(loadingIndexRef.current);
+    }
+  }, [postList]);
+
   const getItemSize = (index) => {
     if (!isItemLoaded(index)) {
+      loadingIndexRef.current = index;
       return 150;
     }
 
@@ -83,8 +95,10 @@ function InfiniteScroll({
 
     if (widthRef.current) {
       console.log(widthRef.current);
-      const margin = widthRef.current * 0.2;
-      const width = widthRef.current - margin;
+      const margin = widthRef.current * 0.1;
+      console.log('margin = ' + margin);
+      const padding = 15;
+      const width = widthRef.current - margin - margin - padding;
       console.log('new width ' + width);
 
       const style = `width:${width}px;${fontFamily};word-wrap:break-word`;
@@ -97,11 +111,16 @@ function InfiniteScroll({
     node.appendChild(postedNode);
     node.appendChild(metadataNode);
 
+    if (post.thumbnail) {
+      const { width, height } = post.thumbnail;
+      const thumbnailNode = document.createElement('div');
+      thumbnailNode.style.cssText = `width:${width}px;height:${height}px;`;
+      node.appendChild(thumbnailNode);
+    }
+
     const nodeHeight = getNodeHeight(node);
-
-    const additionalHeight = post.thumbnail ? post.thumbnail.height + 10 : 10;
-
-    return 50 + nodeHeight + additionalHeight;
+    console.log(`nodeHeight = ${nodeHeight}`);
+    return 50 + nodeHeight;
   };
 
   // Render an item or a loading indicator.
