@@ -72,6 +72,18 @@ function mockData() {
       path: '/r/abmlstock',
       text: '/r/abmlstock',
     },
+    {
+      path: '/r/TheSilphArena',
+      text: '/r/TheSilphArena',
+    },
+    {
+      path: '/r/TheSilphRoad',
+      text: '/r/TheSilphRoad',
+    },
+    {
+      path: '/r/PokemonGOBattleLeague',
+      text: '/r/PokemonGOBattleLeague',
+    },
   ];
 }
 

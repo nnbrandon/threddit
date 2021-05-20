@@ -27,9 +27,14 @@ function Navbar({ navData, selectedSubreddit }) {
       <nav className={styles.nav}>
         <ul>{renderNavData}</ul>
       </nav>
-      <div className={styles.add}>
+      <div className={styles.buttons}>
         {/* Most likely modal open here to add subreddit */}
-        <button className={styles.addButton}>Add Subreddit</button>
+        <span className={styles.buttonLayout}>
+          <button className={styles.button}>Go to Subreddit</button>
+        </span>
+        <span className={styles.buttonLayout}>
+          <button className={styles.button}>Add Subreddit</button>
+        </span>
       </div>
     </div>
   );
