@@ -5,8 +5,16 @@ function mockData() {
       text: 'Home',
     },
     {
+      path: '/r/Coronavirus',
+      text: '/r/Coronavirus',
+    },
+    {
       path: '/r/technology',
       text: '/r/technology',
+    },
+    {
+      path: '/r/ExperiencedDevs',
+      text: '/r/ExperiencedDevs',
     },
     {
       path: '/r/javascript',
@@ -53,6 +61,10 @@ function mockData() {
       text: '/r/wallstreetbets',
     },
     {
+      path: '/r/Wallstreetbetsnew',
+      text: '/r/Wallstreetbetsnew',
+    },
+    {
       path: '/r/stocks',
       text: '/r/stocks',
     },
@@ -73,8 +85,12 @@ function mockData() {
       text: '/r/abmlstock',
     },
     {
-      path: '/r/TheSilphArena',
-      text: '/r/TheSilphArena',
+      path: '/r/StockMarket',
+      text: '/r/StockMarket',
+    },
+    {
+      path: '/r/stocks',
+      text: '/r/stocks',
     },
     {
       path: '/r/TheSilphRoad',
@@ -83,6 +99,10 @@ function mockData() {
     {
       path: '/r/PokemonGOBattleLeague',
       text: '/r/PokemonGOBattleLeague',
+    },
+    {
+      path: '/r/TheSilphArena',
+      text: '/r/TheSilphArena',
     },
   ];
 }

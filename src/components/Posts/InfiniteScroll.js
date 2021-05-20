@@ -7,6 +7,9 @@ import Post from './Post';
 import Spinner from '../Icons/Spinner';
 import styles from './Posts.module.scss';
 
+const fontFamily =
+  "font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;";
+
 function getNodeHeight(node) {
   const clone = node.cloneNode(true);
   // hide the meassured (cloned) element
@@ -47,6 +50,7 @@ function InfiniteScroll({
   const isItemLoaded = (index) => !hasNextPage || index < postList.length;
 
   const listRef = useRef(null);
+  const widthRef = useRef(null);
 
   // Only load 1 page of items at a time.
   // Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
@@ -74,8 +78,20 @@ function InfiniteScroll({
     const metadataNode = document.createElement('div');
 
     titleNode.innerText = post.title;
-    postedNode.innerText = `${post.subreddit} Posted by ${post.prefixedAuthor}`;
+    postedNode.innerText = `r/${post.subreddit} Posted by ${post.prefixedAuthor} XXX days ago`;
     metadataNode.innerText = `${post.score} score | ${post.num_comments} comments`;
+
+    if (widthRef.current) {
+      console.log(widthRef.current);
+      const margin = widthRef.current * 0.2;
+      const width = widthRef.current - margin;
+      console.log('new width ' + width);
+
+      const style = `width:${width}px;${fontFamily};word-wrap:break-word`;
+      titleNode.style.cssText = style;
+      postedNode.style.cssText = style;
+      metadataNode.style.cssText = style;
+    }
 
     node.appendChild(titleNode);
     node.appendChild(postedNode);
@@ -83,9 +99,9 @@ function InfiniteScroll({
 
     const nodeHeight = getNodeHeight(node);
 
-    const thumbnailHeight = post.thumbnail ? post.thumbnail.height + 20 : 0;
+    const additionalHeight = post.thumbnail ? post.thumbnail.height + 10 : 10;
 
-    return 50 + nodeHeight + thumbnailHeight;
+    return 50 + nodeHeight + additionalHeight;
   };
 
   // Render an item or a loading indicator.
@@ -115,30 +131,35 @@ function InfiniteScroll({
 
   return (
     <AutoSizer>
-      {({ height, width }) => (
-        <InfiniteLoader
-          isItemLoaded={isItemLoaded}
-          itemCount={itemCount}
-          loadMoreItems={loadMoreItems}
-          threshold={8}
-        >
-          {({ onItemsRendered, ref }) => (
-            <List
-              itemCount={itemCount}
-              onItemsRendered={onItemsRendered}
-              ref={(list) => {
-                ref(list);
-                listRef.current = list;
-              }}
-              itemSize={getItemSize}
-              height={height}
-              width={width}
-            >
-              {RenderedPost}
-            </List>
-          )}
-        </InfiniteLoader>
-      )}
+      {({ height, width }) => {
+        if (width !== widthRef.current) {
+          widthRef.current = width;
+        }
+        return (
+          <InfiniteLoader
+            isItemLoaded={isItemLoaded}
+            itemCount={itemCount}
+            loadMoreItems={loadMoreItems}
+            threshold={8}
+          >
+            {({ onItemsRendered, ref }) => (
+              <List
+                itemCount={itemCount}
+                onItemsRendered={onItemsRendered}
+                ref={(list) => {
+                  ref(list);
+                  listRef.current = list;
+                }}
+                itemSize={getItemSize}
+                height={height}
+                width={width}
+              >
+                {RenderedPost}
+              </List>
+            )}
+          </InfiniteLoader>
+        );
+      }}
     </AutoSizer>
   );
 }
