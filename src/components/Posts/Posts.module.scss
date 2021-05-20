@@ -16,6 +16,7 @@
   position: relative;
   flex: 1;
 
+  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 3%;
@@ -23,6 +24,15 @@
   a {
     text-decoration: none;
   }
+}
+
+.subredditText {
+  display: flex;
+  align-items: center;
+}
+
+.hamburger {
+  margin-right: 10%;
 }
 
 .link {

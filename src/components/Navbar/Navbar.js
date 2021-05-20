@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { IoIosClose } from 'react-icons/io';
 
 import styles from './Navbar.module.scss';
 
-function Navbar({ navData, selectedSubreddit }) {
+function Navbar({ navData, selectedSubreddit, onCloseNav }) {
   const subreddit = selectedSubreddit ? '/r/' + selectedSubreddit : '';
   const renderNavData = navData.map((data, index) => {
     let selectedStyle;
@@ -24,6 +25,9 @@ function Navbar({ navData, selectedSubreddit }) {
 
   return (
     <div className={styles.sidebar}>
+      <span>
+        <IoIosClose alt="Close" onClick={onCloseNav} size="50px" />
+      </span>
       <nav className={styles.nav}>
         <ul>{renderNavData}</ul>
       </nav>

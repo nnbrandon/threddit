@@ -6,6 +6,7 @@ import Navbar from '../Navbar/Navbar';
 import CommentsOverview from '../Comments/CommentsOverview';
 import InfiniteScroll from './InfiniteScroll';
 import Spinner from '../Icons/Spinner';
+import Hamburger from '../Icons/Hamburger';
 
 import { fetchPosts } from '../../Reddit/posts';
 
@@ -15,6 +16,8 @@ function PostsView({ match, isHome, subreddits }) {
   const [after, setAfter] = useState('');
   const [selectedPost, setSelectedPost] = useState(undefined);
   const history = useHistory();
+
+  const [showNavBar, setShowNavBar] = useState(true);
 
   const [hasNextPage, setHasNextPage] = useState(false);
   const [isNextPageLoading, setIsNextPageLoading] = useState(false);
@@ -84,6 +87,10 @@ function PostsView({ match, isHome, subreddits }) {
     setSelectedPost(post);
   }
 
+  function onCloseNav() {
+    setShowNavBar(!showNavBar);
+  }
+
   function onCloseComments(event) {
     if (event.keyCode === 27 || event.type === 'click') {
       setSelectedPost(undefined);
@@ -105,7 +112,13 @@ function PostsView({ match, isHome, subreddits }) {
   const subredditText = isHome ? <div>Home</div> : <div>r/{subreddit}</div>;
   return (
     <div className={styles.container}>
-      <Navbar navData={subreddits} selectedSubreddit={subreddit} />
+      {showNavBar && (
+        <Navbar
+          navData={subreddits}
+          selectedSubreddit={subreddit}
+          onCloseNav={onCloseNav}
+        />
+      )}
       <div className={styles.posts}>
         <Route
           path={commentsPath}
@@ -117,8 +130,16 @@ function PostsView({ match, isHome, subreddits }) {
             />
           )}
         />
-        <br />
-        {subredditText}
+        <div className={styles.subredditText}>
+          {!showNavBar && (
+            <span className={styles.hamburger}>
+              <Hamburger onClick={onCloseNav} />
+            </span>
+          )}
+          <h3>
+            <i>{subredditText}</i>
+          </h3>
+        </div>
         <br />
         {initialLoading}
         <InfiniteScroll
