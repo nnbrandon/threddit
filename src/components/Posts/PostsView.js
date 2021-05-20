@@ -94,11 +94,12 @@ function PostsView({ match, isHome, subreddits }) {
     }
   }
 
-  const initialLoading = !after ? (
-    <div className={styles.loading}>
-      <Spinner />
-    </div>
-  ) : undefined;
+  const initialLoading =
+    after === '' ? (
+      <div className={styles.loading}>
+        <Spinner />
+      </div>
+    ) : undefined;
 
   const subredditText = isHome ? <div>Home</div> : <div>r/{subreddit}</div>;
   return (
