@@ -77,19 +77,35 @@ function CommentsOverview({
     </div>
   ) : undefined;
 
-  const hamburger = !showNavBar ? <Hamburger onClick={onCloseNav} /> : <span />;
+  const backArrow = showNavBar ? (
+    <IoIosArrowBack
+      className={styles.backArrow}
+      alt="Back"
+      onClick={onCloseComments}
+      size="30px"
+    />
+  ) : (
+    <span />
+  );
 
   return (
     <div className={styles.container} ref={scrollTopRef}>
-      <div className={styles.commentsSection}>
-        <div className={styles.postSectionHeader}>
-          <span className={styles.hamburger}>{hamburger}</span>
+      <div className={styles.postSectionHeader}>
+        <span className={styles.hamburger}>
+          {!showNavBar && <Hamburger onClick={onCloseNav} />}
+          {backArrow}
+        </span>
+        <div>
           <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
         </div>
-        <PostSection post={post} onCloseComments={onCloseComments} />
-        <br />
-        {spinner}
-        <CommentsList comments={comments} />
+      </div>
+      <div className={styles.commentsContainer}>
+        <div className={styles.commentsSection}>
+          <PostSection post={post} onCloseComments={onCloseComments} />
+          <br />
+          {spinner}
+          <CommentsList comments={comments} />
+        </div>
       </div>
     </div>
   );
