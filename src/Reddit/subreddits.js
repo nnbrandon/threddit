@@ -5,6 +5,42 @@ function mockData() {
       text: 'Home',
     },
     {
+      path: '/r/wallstreetbets',
+      text: '/r/wallstreetbets',
+    },
+    {
+      path: '/r/Wallstreetbetsnew',
+      text: '/r/Wallstreetbetsnew',
+    },
+    {
+      path: '/r/stocks',
+      text: '/r/stocks',
+    },
+    {
+      path: '/r/Superstonk',
+      text: '/r/Superstonk',
+    },
+    {
+      path: '/r/GME',
+      text: '/r/GME',
+    },
+    {
+      path: '/r/amcstock',
+      text: '/r/amcstock',
+    },
+    {
+      path: '/r/dogecoin',
+      text: '/r/dogecoin',
+    },
+    {
+      path: '/r/abmlstock',
+      text: '/r/abmlstock',
+    },
+    {
+      path: '/r/stocks',
+      text: '/r/stocks',
+    },
+    {
       path: '/r/Coronavirus',
       text: '/r/Coronavirus',
     },
@@ -55,42 +91,6 @@ function mockData() {
     {
       path: '/r/ffxiv',
       text: '/r/ffxiv',
-    },
-    {
-      path: '/r/wallstreetbets',
-      text: '/r/wallstreetbets',
-    },
-    {
-      path: '/r/Wallstreetbetsnew',
-      text: '/r/Wallstreetbetsnew',
-    },
-    {
-      path: '/r/stocks',
-      text: '/r/stocks',
-    },
-    {
-      path: '/r/GME',
-      text: '/r/GME',
-    },
-    {
-      path: '/r/amcstock',
-      text: '/r/amcstock',
-    },
-    {
-      path: '/r/dogecoin',
-      text: '/r/dogecoin',
-    },
-    {
-      path: '/r/abmlstock',
-      text: '/r/abmlstock',
-    },
-    {
-      path: '/r/StockMarket',
-      text: '/r/StockMarket',
-    },
-    {
-      path: '/r/stocks',
-      text: '/r/stocks',
     },
     {
       path: '/r/TheSilphRoad',
