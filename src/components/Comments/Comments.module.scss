@@ -58,6 +58,14 @@ a {
   border-radius: 5px;
   padding: 10px;
   background-color: $widgetColor;
+
+  ul {
+    padding-left: 3%;
+
+    li {
+      padding-top: 10px;
+    }
+  }
 }
 
 .postSection {
@@ -107,5 +115,13 @@ a {
 .textHtml {
   p {
     margin-top: 10px;
+  }
+
+  ul {
+    padding-left: 3%;
+
+    li {
+      padding-top: 10px;
+    }
   }
 }
