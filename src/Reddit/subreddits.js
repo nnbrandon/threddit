@@ -13,10 +13,6 @@ function mockData() {
       text: '/r/Wallstreetbetsnew',
     },
     {
-      path: '/r/stocks',
-      text: '/r/stocks',
-    },
-    {
       path: '/r/Superstonk',
       text: '/r/Superstonk',
     },
