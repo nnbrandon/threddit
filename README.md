@@ -1,3 +1,14 @@
+Statically hosted: https://nnbrandon.github.io/threddit
+
+Simple SPA:
+
+1. Add cancellation to REST request to Reddit incase user browses to a different subreddit.
+2. Add code to retrieve MORE comments and replies
+
+Extra:
+1. Enable reddit authentication
+2. Create and add comments
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,16 +79,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-Simple SPA:
-
-1. Add cancellation to REST request to Reddit incase user browses to a different subreddit.
-2. Convert to Create React App to enable smooth transition to Next.js
-3. Add code to retrieve MORE comments and replies
-4. Add ability to add subreddits to a user's localStorage
-5. Statically host somewhere
-
-Extra Credit:
-
-1. Enable reddit authentication
-2. Create and add comments
