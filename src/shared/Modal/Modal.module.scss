@@ -6,7 +6,7 @@
     width: 100%;
     background-color: black;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 11;
+    z-index: 999;
     overflow: hidden;
 
     -webkit-transition: 0.5s;
@@ -31,10 +31,18 @@
     @include modalSettings();
     height: 30%;
     width: 30%;
+
+    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        width: 80%;
+    }
 }
 
 .normalModalBox {
     @include modalSettings();
     height: 50%;
     width: 30%;
+
+    @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+        width: 80%;
+    }
 }
