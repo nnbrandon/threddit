@@ -24,7 +24,8 @@
 
 @mixin modalSettings {
     border-radius: 10px;
-    background-color: $darkerBlueColor;    
+    background-color: $darkerBlueColor;
+    border: 2px solid $grayColor;
 }
 
 .smallModalBox {
