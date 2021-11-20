@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Posts.module.scss';
 
-function Post({ isHome, post, selected, onClickPost }) {
-  const { title, score, num_comments, commentsUrl } = post;
+function Post({ isHome, post, onClickPost }) {
+  const { title, score, num_comments } = post;
   const prefixedAuthor = post.getPrefixedAuthor();
   const date = post.timeSince();
   const commentsPath = isHome
@@ -15,7 +15,7 @@ function Post({ isHome, post, selected, onClickPost }) {
     const { url, height, width } = post.thumbnail;
     thumbnail = (
       <div className={styles.thumbnail}>
-        <img src={url} width={width} height={height} />
+        <img src={url} width={width} height={height} alt={title} />
       </div>
     );
   }

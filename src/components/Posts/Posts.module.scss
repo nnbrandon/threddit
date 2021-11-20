@@ -17,8 +17,6 @@
   position: relative;
   flex: 1;
 
-  padding-top: 10px;
-  padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 3%;
 
@@ -30,6 +28,8 @@
 .subredditText {
   display: flex;
   align-items: center;
+  padding-top: 10px;
+  padding-left: 10px;
 }
 
 .hamburger {
@@ -85,4 +85,9 @@
 .selectedPost {
   border-color: $lightGrayColor;
   border: 1px solid $darkBlueColor;
+}
+
+.heart {
+  margin-left: auto;
+  margin-right: 11%;
 }

@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { IoIosClose } from 'react-icons/io';
 
 import styles from './Navbar.module.scss';
+import Button from '../../shared/Button/Button';
 
-function Navbar({ navData, selectedSubreddit, onCloseNav }) {
+function Navbar({ navData, selectedSubreddit, onCloseNav, onShowGoToSubreddit, onShowAddSubreddit }) {
   const subreddit = selectedSubreddit ? '/r/' + selectedSubreddit : '';
   const renderNavData = navData.map((data, index) => {
     let selectedStyle;
@@ -32,12 +33,11 @@ function Navbar({ navData, selectedSubreddit, onCloseNav }) {
         <ul>{renderNavData}</ul>
       </nav>
       <div className={styles.buttons}>
-        {/* Most likely modal open here to add subreddit */}
         <span className={styles.buttonLayout}>
-          <button className={styles.button}>Go to Subreddit</button>
+          <Button onClickEvent={onShowGoToSubreddit} label="Go to Subreddit"/>
         </span>
         <span className={styles.buttonLayout}>
-          <button className={styles.button}>Add Subreddit</button>
+          <Button onClickEvent={onShowAddSubreddit} label="Add Subreddit"/>
         </span>
       </div>
     </div>

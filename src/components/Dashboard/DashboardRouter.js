@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import PostsView from '../Posts/PostsView';
 
-function DashboardRouter({ subreddits }) {
+function DashboardRouter({ subreddits, fetchSubreddits }) {
   return (
     <Switch>
       <Route exact path="/">
@@ -12,13 +12,13 @@ function DashboardRouter({ subreddits }) {
       <Route
         path={'/home'}
         render={(props) => (
-          <PostsView {...props} isHome={true} subreddits={subreddits} />
+          <PostsView {...props} isHome={true} subreddits={subreddits} fetchSubreddits={fetchSubreddits}/>
         )}
       />
       <Route
         path={'/r/:subreddit'}
         render={(props) => (
-          <PostsView {...props} isHome={false} subreddits={subreddits} />
+          <PostsView {...props} isHome={false} subreddits={subreddits} fetchSubreddits={fetchSubreddits}/>
         )}
       />
     </Switch>

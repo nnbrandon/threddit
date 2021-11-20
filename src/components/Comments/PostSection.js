@@ -1,10 +1,9 @@
 import React from 'react';
 import he from 'he';
-import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
 
 import styles from './Comments.module.scss';
 
-function PostSection({ post, onCloseComments }) {
+function PostSection({ post }) {
   let renderPostSection;
   if (post) {
     const { title, score, num_comments } = post;
@@ -14,7 +13,7 @@ function PostSection({ post, onCloseComments }) {
 
     const text = post.text_html ? he.decode(post.text_html) : undefined;
     const url = post.url ? (
-      <a href={post.url} target="_blank">
+      <a href={post.url} target="_blank" rel="noreferrer">
         {post.url}
       </a>
     ) : undefined;
@@ -28,10 +27,6 @@ function PostSection({ post, onCloseComments }) {
 
     renderPostSection = (
       <div className={styles.postSection}>
-        {/* <div className={styles.postSectionHeader}>
-          <IoIosArrowBack alt="Back" onClick={onCloseComments} size="30px" />
-          <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
-        </div> */}
         <div>
           r/{post.subreddit} Posted by {prefixedAuthor} {date}
         </div>

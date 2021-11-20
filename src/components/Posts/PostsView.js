@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router';
+import {IoHeartSharp, IoHeartOutline} from 'react-icons/io5'
 
 import styles from './Posts.module.scss';
 import Navbar from '../Navbar/Navbar';
 import CommentsOverview from '../Comments/CommentsOverview';
 import InfiniteScroll from './InfiniteScroll';
+import GoToSubreddit from '../GoToSubreddit/GoToSubreddit';
 import Spinner from '../Icons/Spinner';
 import Hamburger from '../Icons/Hamburger';
+import AddSubreddit from '../AddSubreddit/AddSubreddit';
 
 import { fetchPosts } from '../../Reddit/posts';
+import { addSubreddit, removeSubreddit, isSubscribed } from '../../Reddit/subreddits';
 
-function PostsView({ match, isHome, subreddits }) {
+function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
   const { subreddit } = match.params;
   const [postList, setPostList] = useState([]);
   const [after, setAfter] = useState('');
@@ -18,6 +22,8 @@ function PostsView({ match, isHome, subreddits }) {
   const history = useHistory();
 
   const [showNavBar, setShowNavBar] = useState(true);
+  const [showGoToSubreddit, setShowGoToSubreddit] = useState(false);
+  const [showAddSubreddit, setShowAddSubreddit] = useState(false);
 
   const [hasNextPage, setHasNextPage] = useState(false);
   const [isNextPageLoading, setIsNextPageLoading] = useState(false);
@@ -91,6 +97,16 @@ function PostsView({ match, isHome, subreddits }) {
     setShowNavBar(!showNavBar);
   }
 
+  function onShowGoToSubreddit() {
+    setShowAddSubreddit(false);
+    setShowGoToSubreddit(!showGoToSubreddit);
+  }
+
+  function onShowAddSubreddit() {
+    setShowGoToSubreddit(false);
+    setShowAddSubreddit(!showAddSubreddit);
+  }
+
   function onCloseComments(event) {
     if (event.keyCode === 27 || event.type === 'click') {
       setSelectedPost(undefined);
@@ -100,6 +116,17 @@ function PostsView({ match, isHome, subreddits }) {
         history.push(`/r/${subreddit}`);
       }
     }
+  }
+
+  function subscribeToSubreddit() {
+    addSubreddit(subreddit);
+    fetchSubreddits();
+  }
+
+  function unsubscribeToSubreddit() {
+    console.log('test');
+    removeSubreddit(subreddit);
+    fetchSubreddits();
   }
 
   const initialLoading =
@@ -117,6 +144,8 @@ function PostsView({ match, isHome, subreddits }) {
           navData={subreddits}
           selectedSubreddit={subreddit}
           onCloseNav={onCloseNav}
+          onShowGoToSubreddit={onShowGoToSubreddit}
+          onShowAddSubreddit={onShowAddSubreddit}
         />
       )}
       <div className={styles.posts}>
@@ -132,6 +161,12 @@ function PostsView({ match, isHome, subreddits }) {
             />
           )}
         />
+        {showGoToSubreddit && (
+          <GoToSubreddit onClose={onShowGoToSubreddit} />
+        )}
+        {showAddSubreddit && (
+          <AddSubreddit onClose={onShowAddSubreddit} fetchSubreddits={fetchSubreddits}/>
+        )}
         <div className={styles.subredditText}>
           {!showNavBar && (
             <span className={styles.hamburger}>
@@ -141,6 +176,13 @@ function PostsView({ match, isHome, subreddits }) {
           <h3>
             <i>{subredditText}</i>
           </h3>
+          {!isHome && <span className={styles.heart}>
+            {isSubscribed(subreddit) ? (
+              <IoHeartSharp size="30px" color="rgb(249, 24, 128)" onClick={unsubscribeToSubreddit}/>
+            ) : (
+              <IoHeartOutline size="30px" onClick={subscribeToSubreddit}/>
+            )}
+          </span>}
         </div>
         <br />
         {initialLoading}

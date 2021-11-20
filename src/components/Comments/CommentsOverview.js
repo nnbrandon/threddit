@@ -39,7 +39,7 @@ function CommentsOverview({
       setComments([]);
       setFetchedPost(undefined);
     };
-  }, []);
+  }, [onCloseComments]);
 
   useEffect(() => {
     async function fetch() {
@@ -69,7 +69,7 @@ function CommentsOverview({
       setComments([]);
       setFetchedPost(undefined);
     };
-  }, [subreddit, postId]);
+  }, [subreddit, postId, getPost]);
 
   const spinner = loading ? (
     <div className={styles.loading}>
