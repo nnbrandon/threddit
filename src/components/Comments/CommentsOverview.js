@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
 
 import styles from './Comments.module.scss';
@@ -20,24 +20,17 @@ function CommentsOverview({
   onCloseNav,
   showNavBar,
 }) {
-  const [comments, setComments] = useState([]);
-  const [fetchedPost, setFetchedPost] = useState(undefined);
-  const [loading, setLoading] = useState(false);
   const { postId, subreddit } = match.params;
-  const scrollTopRef = useRef();
-
-  const getPost =
-    !selectedPost || (selectedPost && selectedPost.id !== postId)
-      ? true
-      : false;
-  const post = getPost ? fetchedPost : selectedPost;
+  const [comments, setComments] = useState([]);
+  const [post, setPost] = useState(selectedPost);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.addEventListener('keydown', onCloseComments);
     return () => {
       document.removeEventListener('keydown', onCloseComments);
       setComments([]);
-      setFetchedPost(undefined);
+      setPost(undefined);
     };
   }, [onCloseComments]);
 
@@ -48,28 +41,28 @@ function CommentsOverview({
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
-          getPost,
+          !selectedPost,
         );
-        setComments(comments);
-
-        if (getPost) {
-          setFetchedPost(post);
+      
+        if (!selectedPost) {
+          setPost(post);
         }
+
+        setComments(comments);
       } catch (err) {
         console.error(err);
       }
       setLoading(false);
     }
 
-    // Scroll to top after subreddit and postId change
-    scrollTopRef.current.scrollTo(0, 0);
     fetch(subreddit, postId);
 
     return () => {
       setComments([]);
-      setFetchedPost(undefined);
+      setPost(undefined);
     };
-  }, [subreddit, postId, getPost]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const spinner = loading ? (
     <div className={styles.loading}>
@@ -89,7 +82,7 @@ function CommentsOverview({
   );
 
   return (
-    <div className={styles.container} ref={scrollTopRef}>
+    <div className={styles.container}>
       <div className={styles.postSectionHeader}>
         <span className={styles.hamburger}>
           {!showNavBar && <Hamburger onClick={onCloseNav} />}

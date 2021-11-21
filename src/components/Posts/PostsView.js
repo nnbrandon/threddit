@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router';
 import {IoHeartSharp, IoHeartOutline} from 'react-icons/io5'
 
@@ -93,9 +93,9 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
     setSelectedPost(post);
   }
 
-  function onCloseNav() {
+  const onCloseNav = useCallback(() => {
     setShowNavBar(!showNavBar);
-  }
+  }, [showNavBar]);
 
   function onShowGoToSubreddit() {
     setShowAddSubreddit(false);
@@ -105,17 +105,6 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
   function onShowAddSubreddit() {
     setShowGoToSubreddit(false);
     setShowAddSubreddit(!showAddSubreddit);
-  }
-
-  function onCloseComments(event) {
-    if (event.keyCode === 27 || event.type === 'click') {
-      setSelectedPost(undefined);
-      if (isHome) {
-        history.push('/home');
-      } else {
-        history.push(`/r/${subreddit}`);
-      }
-    }
   }
 
   function subscribeToSubreddit() {
@@ -128,6 +117,27 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
     removeSubreddit(subreddit);
     fetchSubreddits();
   }
+
+  const onCloseComments = useCallback((event) => {
+    if (event.keyCode === 27 || event.type === 'click') {
+      setSelectedPost(undefined);
+      if (isHome) {
+        history.push('/home');
+      } else {
+        history.push(`/r/${subreddit}`);
+      }
+    }
+  }, [history, isHome, subreddit]);
+
+  const renderCommentsOverview = useCallback((props) => {
+    return (<CommentsOverview
+      {...props}
+      onCloseNav={onCloseNav}
+      showNavBar={showNavBar}
+      selectedPost={selectedPost}
+      onCloseComments={onCloseComments}
+    />);
+  }, [onCloseNav, onCloseComments, showNavBar, selectedPost]);
 
   const initialLoading =
     after === '' ? (
@@ -151,15 +161,7 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
       <div className={styles.posts}>
         <Route
           path={commentsPath}
-          render={(props) => (
-            <CommentsOverview
-              {...props}
-              onCloseNav={onCloseNav}
-              showNavBar={showNavBar}
-              selectedPost={selectedPost}
-              onCloseComments={onCloseComments}
-            />
-          )}
+          render={renderCommentsOverview}
         />
         {showGoToSubreddit && (
           <GoToSubreddit onClose={onShowGoToSubreddit} />
