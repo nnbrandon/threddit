@@ -1,5 +1,16 @@
 @import 'src/styles/variables';
 
+@mixin list {
+  padding-left: 3%;
+  li {
+    padding-top: 10px;
+  }
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding-left: 5%;
+  }
+}
+
 svg {
   cursor: pointer;
 }
@@ -60,19 +71,11 @@ a {
   background-color: $widgetColor;
 
   ul {
-    padding-left: 5%;
-
-    li {
-      padding-top: 10px;
-    }
+    @include list();
   }
 
   ol {
-    padding-left: 5%;
-
-    li {
-      padding-top: 10px;
-    }
+    @include list();
   }
 }
 
@@ -125,19 +128,16 @@ a {
     margin-top: 10px;
   }
 
-  ul {
-    padding-left: 5%;
+  table {
+    table-layout: fixed;
+    width: 100%;
+  }
 
-    li {
-      padding-top: 10px;
-    }
+  ul {
+    @include list();
   }
 
   ol {
-    padding-left: 5%;
-
-    li {
-      padding-top: 10px;
-    }
+    @include list();
   }
 }
