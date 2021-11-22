@@ -11,7 +11,7 @@ export async function fetchPosts(subreddit, currentAfter) {
       subreddit = 'all';  
     } else {
       subreddit = `${subreddits.map(subreddit => subreddit.text + '+')}`;
-      subreddit = subreddit.replace(',', "").substring(0, subreddit.length - 1);
+      subreddit = subreddit.replaceAll(',', "").substring(0, subreddit.length - 1);
     }
   }
 
