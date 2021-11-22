@@ -155,7 +155,6 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
             )}
           </span>}
         </div>
-        <br />
         <InfiniteScroll
           isHome={isHome}
           postList={postList}
