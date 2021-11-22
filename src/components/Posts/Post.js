@@ -15,7 +15,7 @@ function Post({ isHome, post, onClickPost }) {
     const { url, height, width } = post.thumbnail;
     thumbnail = (
       <div className={styles.thumbnail}>
-        <img src={url} width={width} height={height} alt={title} />
+        <img src={url} width={width} height={height} alt="" />
       </div>
     );
   }
@@ -30,7 +30,7 @@ function Post({ isHome, post, onClickPost }) {
         </div>
         <h3>{title}</h3>
         {thumbnail}
-        <div>
+        <div style={{marginTop: 'auto'}}>
           {score} score | {num_comments} comments
         </div>
       </Link>

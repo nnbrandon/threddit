@@ -35,10 +35,15 @@ a {
   overflow: hidden;
 }
 
-.commentsContainer {
-  padding: 0 10% 10px 10%;
-  overflow: auto;
+.commentWrapper {
+  width: 100%;
   height: 100%;
+}
+
+.commentsContainer {
+  padding-top: 0;
+  margin-bottom: 50%;
+  height: 100vh;
   width: 100%;
 
   @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
@@ -64,7 +69,9 @@ a {
 }
 
 .comment {
-  margin-bottom: 20px;
+  margin-bottom: 1%;
+  margin-left: 10%;
+  margin-right: 10%;
   border: 1px solid $darkBlueColor;
   border-radius: 5px;
   padding: 10px;
@@ -77,16 +84,32 @@ a {
   ol {
     @include list();
   }
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    margin-left: 0%;
+    margin-right: 0%;
+  }
+}
+
+.postSectionWrapper {
+  margin-left: 10%;
+  margin-right: 10%;
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    margin-left: 0%;
+    margin-right: 0%;
+  }
 }
 
 .postSection {
   width: 100%;
+  height: 100%;
   padding: 10px 10px 10px 10px;
+  margin-bottom: 2%;
   display: flex;
   flex-direction: column;
   border: 1px solid $darkBlueColor;
   background-color: $widgetColor;
-  border-radius: 5px;
   box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
     0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
+import { Virtuoso } from 'react-virtuoso'
 
 import styles from './Comments.module.scss';
 import PostSection from './PostSection';
-import CommentsList from './CommentsList';
 import Spinner from '../Icons/Spinner';
 import Hamburger from '../Icons/Hamburger';
+import Comment from './Comment';
 
 import { fetchComments } from '../../Reddit/comments';
 
@@ -23,7 +24,6 @@ function CommentsOverview({
   const { postId, subreddit } = match.params;
   const [comments, setComments] = useState([]);
   const [post, setPost] = useState(selectedPost);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     document.addEventListener('keydown', onCloseComments);
@@ -37,7 +37,6 @@ function CommentsOverview({
   useEffect(() => {
     async function fetch() {
       const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
-      setLoading(true);
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
@@ -52,7 +51,6 @@ function CommentsOverview({
       } catch (err) {
         console.error(err);
       }
-      setLoading(false);
     }
 
     fetch(subreddit, postId);
@@ -64,12 +62,6 @@ function CommentsOverview({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const spinner = loading ? (
-    <div className={styles.loading}>
-      <Spinner />
-    </div>
-  ) : undefined;
-
   const backArrow = showNavBar ? (
     <IoIosArrowBack
       className={styles.backArrow}
@@ -80,6 +72,35 @@ function CommentsOverview({
   ) : (
     <span />
   );
+  const RenderedPostHeader = useCallback(() => {
+    return (
+      <div className={styles.postSectionWrapper}>
+        <PostSection post={post} onCloseComments={onCloseComments} />
+      </div>
+    );
+  }, [post, onCloseComments]);
+
+  // Render a Comment
+  const RenderedComment = useCallback((index) => {
+    const comment = comments[index]
+    return (
+      <div className={styles.commentWrapper}>
+        <Comment
+          key={comment.id}
+          comment={comment}
+        />
+      </div>
+    );
+  }, [comments]);
+
+  const LoadingFooter = useCallback(() => {
+    const spinner = (
+      <div className={styles.loading}>
+        <Spinner />
+      </div>
+    )
+    return spinner;
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -94,10 +115,15 @@ function CommentsOverview({
       </div>
       <div className={styles.commentsContainer}>
         <div className={styles.commentsSection}>
-          <PostSection post={post} onCloseComments={onCloseComments} />
-          <br />
-          {spinner}
-          <CommentsList comments={comments} />
+          <Virtuoso 
+            style={{height: "100vh", width: "100%"}}
+            data={comments}
+            itemContent={RenderedComment}
+            components={{
+              Header: RenderedPostHeader,
+              Footer: LoadingFooter
+            }}
+          />
         </div>
       </div>
     </div>
