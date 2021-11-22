@@ -1,16 +1,24 @@
 import axios from 'axios';
 
 import { Post } from './post';
+import { fetchSubreddits } from './subreddits';
 
 export async function fetchPosts(subreddit, currentAfter) {
   if (!subreddit) {
-    subreddit = 'all';
+    const subreddits = fetchSubreddits().filter(subreddit => subreddit.text !== 'Home');
+
+    if (!subreddits.length) {
+      subreddit = 'all';  
+    } else {
+      subreddit = `${subreddits.map(subreddit => subreddit.text + '+')}`;
+      subreddit = subreddit.replace(',', "").substring(0, subreddit.length - 1);
+    }
   }
+
+  const requestUrl = `https://www.reddit.com/r/${subreddit}.json?after=${currentAfter}&limit=15`
   let result;
   try {
-    result = await axios.get(
-      `https://www.reddit.com/r/${subreddit}.json?after=${currentAfter}&limit=15`,
-    );
+    result = await axios.get(requestUrl);
     console.log(result);
     if (result.status !== 200) {
       throw new Error(`Unable to fetch posts for ${subreddit}`);
