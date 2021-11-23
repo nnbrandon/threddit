@@ -65,8 +65,8 @@ a {
 
 .comment {
   margin-bottom: 1%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
   border: 1px solid $darkBlueColor;
   border-radius: 5px;
   padding: 10px;
@@ -88,8 +88,8 @@ a {
 }
 
 .postSectionWrapper {
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
 
   @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     margin-left: 0%;
@@ -120,7 +120,6 @@ a {
   position: sticky;
   top: 0;
   padding-top: 5px;
-  padding-bottom: 5px;
   padding-left: 10px;
   padding-right: 10px;
   background-color: $darkBlueColor;
@@ -135,6 +134,17 @@ a {
 
 .closeButton {
   float: right;
+}
+
+.arrowDown {
+  position: absolute;
+  z-index: 99;
+  top: 90%;
+  left: 90%;
+  
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    left: 85%;
+  }
 }
 
 .previewImg {

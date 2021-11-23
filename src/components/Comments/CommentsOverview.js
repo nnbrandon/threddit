@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { IoIosArrowBack, IoIosClose } from 'react-icons/io';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { IoIosArrowBack, IoIosClose, IoIosArrowDropdownCircle as DropdownArray } from 'react-icons/io';
 import { Virtuoso } from 'react-virtuoso'
 
 import styles from './Comments.module.scss';
@@ -24,6 +24,13 @@ function CommentsOverview({
   const { postId, subreddit } = match.params;
   const [comments, setComments] = useState([]);
   const [post, setPost] = useState(selectedPost);
+  const virtuosoRef = useRef(null);
+  const commentIndexRef = useRef({
+    startIndex: 0,
+    endIndex: 0
+  });
+  const currentCommentIndex = useRef(0);
+  const didFirstClick = useRef(false);
 
   useEffect(() => {
     document.addEventListener('keydown', onCloseComments);
@@ -54,13 +61,48 @@ function CommentsOverview({
     }
 
     fetch(subreddit, postId);
-
-    return () => {
-      setComments([]);
-      setPost(undefined);
-    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function scrollToNextComment() {
+    if (virtuosoRef.current) {
+      const currentIndex = currentCommentIndex.current;
+      let nextIndex;
+      if (!didFirstClick.current) {
+        didFirstClick.current = true;
+        nextIndex = currentIndex;
+      } else {
+        nextIndex = currentIndex + 1;
+      }
+
+      for (;nextIndex < comments.length; nextIndex++) {
+        if (comments[nextIndex].depth === 0) {
+          break;
+        }
+      }
+
+      currentCommentIndex.current = nextIndex;
+
+      virtuosoRef.current.scrollToIndex({
+        index: nextIndex,
+        align: 'start',
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function setCommentsRange(indices) {
+    commentIndexRef.current = indices
+    const { startIndex, endIndex } = commentIndexRef.current;
+    console.log(commentIndexRef.current);
+    if (currentCommentIndex.current < startIndex || currentCommentIndex.current > endIndex) {
+      console.log('currentCommentIndex is out of range');
+      if (!didFirstClick.current) {
+        didFirstClick.current = true;
+      }
+      currentCommentIndex.current = startIndex;
+    }
+  }
 
   const backArrow = showNavBar ? (
     <IoIosArrowBack
@@ -85,6 +127,7 @@ function CommentsOverview({
     const comment = comments[index]
     return (
       <div className={styles.commentWrapper}>
+        {/* <span>{index}</span> */}
         <Comment
           key={comment.id}
           comment={comment}
@@ -110,12 +153,17 @@ function CommentsOverview({
           {backArrow}
         </span>
         <div>
-          <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
+          <IoIosClose alt="Close" onClick={onCloseComments} size="40px"/>
         </div>
+      </div>
+      <div className={styles.arrowDown}>
+        <DropdownArray alt="Next Comment" onClick={scrollToNextComment} size="50px" color="#4fbcff"/>
       </div>
       <div className={styles.commentsContainer}>
         <div className={styles.commentsSection}>
           <Virtuoso 
+            ref={virtuosoRef}
+            rangeChanged={setCommentsRange}
             style={{height: "100vh", width: "100%"}}
             data={comments}
             itemContent={RenderedComment}

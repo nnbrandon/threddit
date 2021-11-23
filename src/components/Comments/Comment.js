@@ -13,7 +13,7 @@ function Comment({ comment }) {
   }
 
   return (
-    <div className={styles.comment} key={id}>
+    <div className={styles.comment} key={id} style={{marginLeft: `${depth * 0.8 + 5}%`}}>
       <div>
         Posted by {prefixedAuthor} {date}
       </div>

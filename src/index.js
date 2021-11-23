@@ -3,6 +3,16 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './styles/index.scss';
 import reportWebVitals from './reportWebVitals';
+import smoothscroll from 'smoothscroll-polyfill';
+
+(async function() {
+  console.log('polyfill');
+  smoothscroll.polyfill();
+
+  if (!("scrollBehavior" in document.documentElement.style)) {
+    await import('smoothscroll-anchor-polyfill');
+  }
+})();
 
 ReactDOM.render(
     <React.StrictMode>
