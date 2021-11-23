@@ -9,6 +9,7 @@ import TextInput from '../../shared/TextInput/TextInput';
 function Navbar({ navData, selectedSubreddit, onCloseNav, onShowAddSubreddit }) {
   const [inputSubreddit, setInputSubreddit] = useState('');
   const history = useHistory();
+  const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
 
   const subreddit = selectedSubreddit ? '/r/' + selectedSubreddit : '';
   const renderNavData = navData.map((data, index) => {
@@ -21,15 +22,20 @@ function Navbar({ navData, selectedSubreddit, onCloseNav, onShowAddSubreddit }) 
     }
     return (
       <li key={index}>
-        <Link className={selectedStyle} to={data.path}>
+        <Link className={selectedStyle} to={data.path} onClick={onClickNavItem}>
           {data.text}
         </Link>
       </li>
     );
   });
 
+  function onClickNavItem() {
+    if (isMobile) {
+      onCloseNav();
+    }
+  }
+
   function onChangeSubreddit(id, value) {
-    console.log(value);
     setInputSubreddit(value);
   }
 
@@ -40,6 +46,10 @@ function Navbar({ navData, selectedSubreddit, onCloseNav, onShowAddSubreddit }) 
         history.push('/home');
       } else {
         history.push('/r/' + inputSubreddit);
+      }
+
+      if (isMobile) {
+        onCloseNav();
       }
     }
   }
