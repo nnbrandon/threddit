@@ -13,7 +13,7 @@ function Comment({ comment }) {
   }
 
   const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
-  const marginLeft = isMobile ? `${depth * 0.8 + 0}%` : `${depth * 0.8 + 5}%`
+  const marginLeft = isMobile ? `${depth * 3.5 + 0}%` : `${depth * 0.8 + 5}%`
 
   return (
     <div className={styles.comment} key={id} style={{marginLeft}}>
