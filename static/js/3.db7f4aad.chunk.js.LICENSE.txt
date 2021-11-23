@@ -1,1 +1,0 @@
-/** @license MIT smoothscroll-anchor-polyfill@1.3.4 (c) 2021 Jonas Kuske */
