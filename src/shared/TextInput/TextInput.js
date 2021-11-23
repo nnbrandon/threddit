@@ -3,12 +3,14 @@ import styles from './TextInput.module.scss';
 
 function TextInput({
     id,
+    type = 'text',
     locked,
     focused,
     value,
     error,
     label = '',
-    onChange
+    onChange,
+    onKeyPress
 }) {
     const [active, setActive] = useState((locked && focused) || false);
     const [inputValue, setInputValue] = useState(value || '');
@@ -24,16 +26,20 @@ function TextInput({
     const fieldClassName = `${styles.field} ${(locked ? active : active || value) &&
         styles.active} ${(locked && !active) ? styles.locked : undefined}`;
 
+    const placeholder = active ? '' : label;
+
     return (
         <div className={fieldClassName}>
             <input
                 id={id}
-                type="text"
+                type={type}
                 value={inputValue}
-                placeholder={label}
+                placeholder={placeholder}
                 onChange={onChangeEvent}
                 onFocus={() => !locked && setActive(true)}
                 onBlur={() => !locked && setActive(false)}
+                onKeyPress={onKeyPress}
+                spellCheck="false"
             />
             <label htmlFor={id} className={error && 'error'}>
                 {inputError || label}

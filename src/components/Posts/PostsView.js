@@ -6,7 +6,6 @@ import styles from './Posts.module.scss';
 import Navbar from '../Navbar/Navbar';
 import CommentsOverview from '../Comments/CommentsOverview';
 import InfiniteScroll from './InfiniteScroll';
-import GoToSubreddit from '../GoToSubreddit/GoToSubreddit';
 import Hamburger from '../Icons/Hamburger';
 import AddSubreddit from '../AddSubreddit/AddSubreddit';
 
@@ -21,7 +20,6 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
   const history = useHistory();
 
   const [showNavBar, setShowNavBar] = useState(true);
-  const [showGoToSubreddit, setShowGoToSubreddit] = useState(false);
   const [showAddSubreddit, setShowAddSubreddit] = useState(false);
 
   function _loadNextPage(...args) {
@@ -73,13 +71,7 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
     setShowNavBar(!showNavBar);
   }, [showNavBar]);
 
-  function onShowGoToSubreddit() {
-    setShowAddSubreddit(false);
-    setShowGoToSubreddit(!showGoToSubreddit);
-  }
-
   function onShowAddSubreddit() {
-    setShowGoToSubreddit(false);
     setShowAddSubreddit(!showAddSubreddit);
   }
 
@@ -123,7 +115,6 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
           navData={subreddits}
           selectedSubreddit={subreddit}
           onCloseNav={onCloseNav}
-          onShowGoToSubreddit={onShowGoToSubreddit}
           onShowAddSubreddit={onShowAddSubreddit}
         />
       )}
@@ -132,9 +123,6 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
           path={commentsPath}
           render={renderCommentsOverview}
         />
-        {showGoToSubreddit && (
-          <GoToSubreddit onClose={onShowGoToSubreddit} />
-        )}
         {showAddSubreddit && (
           <AddSubreddit onClose={onShowAddSubreddit} fetchSubreddits={fetchSubreddits}/>
         )}

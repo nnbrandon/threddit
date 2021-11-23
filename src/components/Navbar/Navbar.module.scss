@@ -12,6 +12,12 @@
   }
 }
 
+.search {
+  position: sticky;
+  top: 0;
+  padding: 10px;
+}
+
 .buttons {
   display: flex;
   flex-direction: column;
