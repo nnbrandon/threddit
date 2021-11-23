@@ -13,3 +13,12 @@
     transform: rotate(360deg);
   }
 }
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}

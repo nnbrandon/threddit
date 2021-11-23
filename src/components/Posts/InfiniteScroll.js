@@ -31,14 +31,6 @@ function InfiniteScroll({
     );
   }, [isHome, onClickPost, postList]);
 
-  const LoadingFooter = useCallback(() => {
-    return (
-      <div className={`${styles.loading}`}>
-        <Spinner />
-      </div>
-    )
-  }, []);
-
   return (
     <Virtuoso
       style={{height: "100vh", width: "100%"}}
@@ -46,7 +38,13 @@ function InfiniteScroll({
       endReached={loadNextPage}
       itemContent={RenderedPost}
       components={{
-        Footer: LoadingFooter
+        Footer: () => {
+          return (
+            <div className={`${styles.loading}`}>
+              <Spinner />
+            </div>
+          );
+        }
       }}
     />
   );

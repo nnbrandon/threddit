@@ -24,6 +24,7 @@ function CommentsOverview({
   const { postId, subreddit } = match.params;
   const [comments, setComments] = useState([]);
   const [post, setPost] = useState(selectedPost);
+  const [loading, setLoading] = useState(false);
   const virtuosoRef = useRef(null);
   const commentIndexRef = useRef({
     startIndex: 0,
@@ -44,6 +45,7 @@ function CommentsOverview({
   useEffect(() => {
     async function fetch() {
       const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
+      setLoading(true);
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
@@ -55,6 +57,7 @@ function CommentsOverview({
         }
 
         setComments(comments);
+        setLoading(false);
       } catch (err) {
         console.error(err);
       }
@@ -127,7 +130,6 @@ function CommentsOverview({
     const comment = comments[index]
     return (
       <div className={styles.commentWrapper}>
-        {/* <span>{index}</span> */}
         <Comment
           key={comment.id}
           comment={comment}
@@ -135,15 +137,6 @@ function CommentsOverview({
       </div>
     );
   }, [comments]);
-
-  const LoadingFooter = useCallback(() => {
-    const spinner = (
-      <div className={styles.loading}>
-        <Spinner />
-      </div>
-    )
-    return spinner;
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -169,7 +162,14 @@ function CommentsOverview({
             itemContent={RenderedComment}
             components={{
               Header: RenderedPostHeader,
-              Footer: LoadingFooter
+              Footer: () => {
+                const className = loading ? styles.loading : styles.notLoading;
+                return (
+                  <div className={className}>
+                    <Spinner />
+                  </div>
+                );
+              }
             }}
           />
         </div>
