@@ -18,8 +18,9 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
   const [after, setAfter] = useState('');
   const [selectedPost, setSelectedPost] = useState(undefined);
   const history = useHistory();
+  const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
 
-  const [showNavBar, setShowNavBar] = useState(window.screen.width < 320 && window.screen.width > 480);
+  const [showNavBar, setShowNavBar] = useState(!isMobile);
   const [showAddSubreddit, setShowAddSubreddit] = useState(false);
 
   function _loadNextPage(...args) {
@@ -29,7 +30,7 @@ function PostsView({ match, isHome, subreddits, fetchSubreddits }) {
           const { posts, nextAfter } = await fetchPosts(subreddit, after);
           setPostList((prevPostList) => [...prevPostList, ...posts]);
           setAfter(nextAfter);
-        }, 500);
+        }, 1000);
       } catch (err) {
         console.error(err);
       }
