@@ -33,7 +33,7 @@ function InfiniteScroll({
 
   return (
     <Virtuoso
-      style={{height: "100vh", width: "100%"}}
+      style={{height: "93vh", width: "100%"}}
       data={postList}
       endReached={loadNextPage}
       itemContent={RenderedPost}
