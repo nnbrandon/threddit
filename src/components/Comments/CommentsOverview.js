@@ -157,7 +157,7 @@ function CommentsOverview({
           <Virtuoso 
             ref={virtuosoRef}
             rangeChanged={setCommentsRange}
-            style={{height: "100vh", width: "100%"}}
+            style={{height: "93vh", width: "100%"}}
             data={comments}
             itemContent={RenderedComment}
             components={{
