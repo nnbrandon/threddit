@@ -12,8 +12,11 @@ function Comment({ comment }) {
     text = he.decode(body_html);
   }
 
+  const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
+  const marginLeft = isMobile ? `${depth * 0.8 + 0}%` : `${depth * 0.8 + 5}%`
+
   return (
-    <div className={styles.comment} key={id} style={{marginLeft: `${depth * 0.8 + 5}%`}}>
+    <div className={styles.comment} key={id} style={{marginLeft}}>
       <div>
         Posted by {prefixedAuthor} {date}
       </div>
