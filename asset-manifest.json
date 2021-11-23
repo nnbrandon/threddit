@@ -1,22 +1,25 @@
 {
   "files": {
-    "main.css": "/threddit/static/css/main.8d5fb7e5.chunk.css",
-    "main.js": "/threddit/static/js/main.c624f5f3.chunk.js",
-    "main.js.map": "/threddit/static/js/main.c624f5f3.chunk.js.map",
-    "runtime-main.js": "/threddit/static/js/runtime-main.63209a21.js",
-    "runtime-main.js.map": "/threddit/static/js/runtime-main.63209a21.js.map",
-    "static/js/2.b1d4dbf6.chunk.js": "/threddit/static/js/2.b1d4dbf6.chunk.js",
-    "static/js/2.b1d4dbf6.chunk.js.map": "/threddit/static/js/2.b1d4dbf6.chunk.js.map",
-    "static/js/3.868149da.chunk.js": "/threddit/static/js/3.868149da.chunk.js",
-    "static/js/3.868149da.chunk.js.map": "/threddit/static/js/3.868149da.chunk.js.map",
+    "main.css": "/threddit/static/css/main.1b563b0a.chunk.css",
+    "main.js": "/threddit/static/js/main.8ae8bc3b.chunk.js",
+    "main.js.map": "/threddit/static/js/main.8ae8bc3b.chunk.js.map",
+    "runtime-main.js": "/threddit/static/js/runtime-main.bb348a72.js",
+    "runtime-main.js.map": "/threddit/static/js/runtime-main.bb348a72.js.map",
+    "static/js/2.61063bd4.chunk.js": "/threddit/static/js/2.61063bd4.chunk.js",
+    "static/js/2.61063bd4.chunk.js.map": "/threddit/static/js/2.61063bd4.chunk.js.map",
+    "static/js/3.db7f4aad.chunk.js": "/threddit/static/js/3.db7f4aad.chunk.js",
+    "static/js/3.db7f4aad.chunk.js.map": "/threddit/static/js/3.db7f4aad.chunk.js.map",
+    "static/js/4.6549b505.chunk.js": "/threddit/static/js/4.6549b505.chunk.js",
+    "static/js/4.6549b505.chunk.js.map": "/threddit/static/js/4.6549b505.chunk.js.map",
     "index.html": "/threddit/index.html",
-    "static/css/main.8d5fb7e5.chunk.css.map": "/threddit/static/css/main.8d5fb7e5.chunk.css.map",
-    "static/js/2.b1d4dbf6.chunk.js.LICENSE.txt": "/threddit/static/js/2.b1d4dbf6.chunk.js.LICENSE.txt"
+    "static/css/main.1b563b0a.chunk.css.map": "/threddit/static/css/main.1b563b0a.chunk.css.map",
+    "static/js/2.61063bd4.chunk.js.LICENSE.txt": "/threddit/static/js/2.61063bd4.chunk.js.LICENSE.txt",
+    "static/js/3.db7f4aad.chunk.js.LICENSE.txt": "/threddit/static/js/3.db7f4aad.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.63209a21.js",
-    "static/js/2.b1d4dbf6.chunk.js",
-    "static/css/main.8d5fb7e5.chunk.css",
-    "static/js/main.c624f5f3.chunk.js"
+    "static/js/runtime-main.bb348a72.js",
+    "static/js/2.61063bd4.chunk.js",
+    "static/css/main.1b563b0a.chunk.css",
+    "static/js/main.8ae8bc3b.chunk.js"
   ]
 }
