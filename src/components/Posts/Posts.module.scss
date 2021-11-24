@@ -1,4 +1,4 @@
-@import 'src/styles/variables';
+@import "src/styles/variables";
 
 .container {
   display: flex;
@@ -85,7 +85,23 @@
 .thumbnail {
   display: flex;
   justify-content: flex-start;
+}
+
+.thumbnailTitle {
+  padding-left: 1%;
+}
+
+.previewWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: center;
   align-items: center;
+}
+
+.previewImg {
+  max-height: 500px;
+  max-width: 80%;
+  object-fit: contain;
 }
 
 .selectedPost {

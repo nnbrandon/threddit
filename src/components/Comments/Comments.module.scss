@@ -1,4 +1,4 @@
-@import 'src/styles/variables';
+@import "src/styles/variables";
 
 @mixin list {
   padding-left: 3%;
@@ -144,7 +144,7 @@ a {
   z-index: 99;
   top: 90%;
   left: 90%;
-  
+
   @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     left: 85%;
   }
@@ -152,7 +152,8 @@ a {
 
 .previewImg {
   max-height: 500px;
-  max-width: 90%;
+  max-width: 80%;
+  object-fit: contain;
 }
 
 .textHtml {

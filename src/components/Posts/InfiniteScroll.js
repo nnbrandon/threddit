@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
-import { Virtuoso } from 'react-virtuoso'
+import React, { useCallback } from "react";
+import { Virtuoso } from "react-virtuoso";
 
-import Post from './Post';
-import Spinner from '../Icons/Spinner';
-import styles from './Posts.module.scss';
+import Post from "./Post";
+import Spinner from "../Icons/Spinner";
+import styles from "./Posts.module.scss";
 
 function InfiniteScroll({
   isHome,
@@ -17,25 +17,32 @@ function InfiniteScroll({
   onClickPost,
 }) {
   // Render a Post
-  const RenderedPost = useCallback((index) => {
-    const post = postList[index]
-    return (
-      <div className={styles.postWrapper}>
-      <Post
-        isHome={isHome}
-        key={post.id}
-        post={post}
-        onClickPost={onClickPost}
-      />
-    </div>
-    );
-  }, [isHome, onClickPost, postList]);
+  const RenderedPost = useCallback(
+    (index) => {
+      const post = postList[index];
+      return (
+        <div className={styles.postWrapper}>
+          <Post
+            isHome={isHome}
+            key={post.id}
+            post={post}
+            onClickPost={onClickPost}
+          />
+        </div>
+      );
+    },
+    [isHome, onClickPost, postList]
+  );
 
   return (
     <Virtuoso
-      style={{height: "93vh", width: "100%"}}
+      style={{ height: "93vh", width: "100%" }}
       data={postList}
       endReached={loadNextPage}
+      increaseViewportBy={{
+        top: 0,
+        bottom: 1000,
+      }}
       itemContent={RenderedPost}
       components={{
         Footer: () => {
@@ -44,7 +51,7 @@ function InfiniteScroll({
               <Spinner />
             </div>
           );
-        }
+        },
       }}
     />
   );

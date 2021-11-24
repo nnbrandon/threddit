@@ -1,11 +1,10 @@
-
 export function fetchSubreddits() {
-  const localStorageSubreddits = Object.keys(localStorage).map(key => {
+  const localStorageSubreddits = Object.keys(localStorage).map((key) => {
     return {
       path: localStorage.getItem(key),
       text: key,
     };
-  })
+  });
   const sortedSubreddits = localStorageSubreddits.sort((a, b) => {
     const lowercasedA = a.text.toLowerCase();
     const lowercasedB = b.text.toLowerCase();
@@ -21,17 +20,20 @@ export function fetchSubreddits() {
     return 0;
   });
 
-  const subreddits = [{
-    path: '/home',
-    text: 'Home',
-  }, ...sortedSubreddits];
+  const subreddits = [
+    {
+      path: "/home",
+      text: "Home",
+    },
+    ...sortedSubreddits,
+  ];
 
   return subreddits;
 }
 
 export function addSubreddit(subreddit) {
   if (!localStorage.getItem(subreddit)) {
-    localStorage.setItem(subreddit, '/r/' + subreddit);
+    localStorage.setItem(subreddit, "/r/" + subreddit);
   }
 }
 

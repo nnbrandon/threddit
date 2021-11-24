@@ -1,14 +1,18 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { IoIosArrowBack, IoIosClose, IoIosArrowDropdownCircle as DropdownArray } from 'react-icons/io';
-import { Virtuoso } from 'react-virtuoso'
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import {
+  IoIosArrowBack,
+  IoIosClose,
+  IoIosArrowDropdownCircle as DropdownArray,
+} from "react-icons/io";
+import { Virtuoso } from "react-virtuoso";
 
-import styles from './Comments.module.scss';
-import PostSection from './PostSection';
-import Spinner from '../Icons/Spinner';
-import Hamburger from '../Icons/Hamburger';
-import Comment from './Comment';
+import styles from "./Comments.module.scss";
+import PostSection from "./PostSection";
+import Spinner from "../Icons/Spinner";
+import Hamburger from "../Icons/Hamburger";
+import Comment from "./Comment";
 
-import { fetchComments } from '../../Reddit/comments';
+import { fetchComments } from "../../Reddit/comments";
 
 function getCommentsUrlJSON(subreddit, postId) {
   return `https://www.reddit.com/r/${subreddit}/comments/${postId}.json`;
@@ -28,15 +32,15 @@ function CommentsOverview({
   const virtuosoRef = useRef(null);
   const commentIndexRef = useRef({
     startIndex: 0,
-    endIndex: 0
+    endIndex: 0,
   });
   const currentCommentIndex = useRef(0);
   const didFirstClick = useRef(false);
 
   useEffect(() => {
-    document.addEventListener('keydown', onCloseComments);
+    document.addEventListener("keydown", onCloseComments);
     return () => {
-      document.removeEventListener('keydown', onCloseComments);
+      document.removeEventListener("keydown", onCloseComments);
       setComments([]);
       setPost(undefined);
     };
@@ -49,9 +53,9 @@ function CommentsOverview({
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
-          !selectedPost,
+          !selectedPost
         );
-      
+
         if (!selectedPost) {
           setPost(post);
         }
@@ -64,7 +68,7 @@ function CommentsOverview({
     }
 
     fetch(subreddit, postId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function scrollToNextComment() {
@@ -78,7 +82,7 @@ function CommentsOverview({
         nextIndex = currentIndex + 1;
       }
 
-      for (;nextIndex < comments.length; nextIndex++) {
+      for (; nextIndex < comments.length; nextIndex++) {
         if (comments[nextIndex].depth === 0) {
           break;
         }
@@ -88,18 +92,21 @@ function CommentsOverview({
 
       virtuosoRef.current.scrollToIndex({
         index: nextIndex,
-        align: 'start',
-        behavior: 'smooth'
+        align: "start",
+        behavior: "smooth",
       });
     }
   }
 
   function setCommentsRange(indices) {
-    commentIndexRef.current = indices
+    commentIndexRef.current = indices;
     const { startIndex, endIndex } = commentIndexRef.current;
     console.log(commentIndexRef.current);
-    if (currentCommentIndex.current < startIndex || currentCommentIndex.current > endIndex) {
-      console.log('currentCommentIndex is out of range');
+    if (
+      currentCommentIndex.current < startIndex ||
+      currentCommentIndex.current > endIndex
+    ) {
+      console.log("currentCommentIndex is out of range");
       if (!didFirstClick.current) {
         didFirstClick.current = true;
       }
@@ -126,17 +133,14 @@ function CommentsOverview({
   }, [post, onCloseComments]);
 
   // Render a Comment
-  const RenderedComment = useCallback((index) => {
-    const comment = comments[index]
+  const RenderedComment = (index) => {
+    const comment = comments[index];
     return (
       <div className={styles.commentWrapper}>
-        <Comment
-          key={comment.id}
-          comment={comment}
-        />
+        <Comment key={comment.id} comment={comment} />
       </div>
     );
-  }, [comments]);
+  };
 
   return (
     <div className={styles.container}>
@@ -146,18 +150,23 @@ function CommentsOverview({
           {backArrow}
         </span>
         <div>
-          <IoIosClose alt="Close" onClick={onCloseComments} size="40px"/>
+          <IoIosClose alt="Close" onClick={onCloseComments} size="40px" />
         </div>
       </div>
       <div className={styles.arrowDown}>
-        <DropdownArray alt="Next Comment" onClick={scrollToNextComment} size="50px" color="#4fbcff"/>
+        <DropdownArray
+          alt="Next Comment"
+          onClick={scrollToNextComment}
+          size="50px"
+          color="#4fbcff"
+        />
       </div>
       <div className={styles.commentsContainer}>
         <div className={styles.commentsSection}>
-          <Virtuoso 
+          <Virtuoso
             ref={virtuosoRef}
             rangeChanged={setCommentsRange}
-            style={{height: "93vh", width: "100%"}}
+            style={{ height: "93vh", width: "100%" }}
             data={comments}
             itemContent={RenderedComment}
             components={{
@@ -169,7 +178,7 @@ function CommentsOverview({
                     <Spinner />
                   </div>
                 );
-              }
+              },
             }}
           />
         </div>
