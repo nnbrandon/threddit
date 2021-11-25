@@ -1,14 +1,18 @@
-import React from 'react';
-import ThredditRouter from './components/ThredditRouter';
+import React from "react";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
+
+import DashboardView from "./pages/Dashboard/DashboardView";
 
 function App() {
-  window.addEventListener("load",function() {
-    setTimeout(function(){
-        // This hides the address bar:
-        window.scrollTo(0, 1);
-    }, 0);
-  });
-  return <ThredditRouter />;
+  return (
+    <React.Fragment>
+      <Router>
+        <Switch>
+          <Route path="*" component={DashboardView} />
+        </Switch>
+      </Router>
+    </React.Fragment>
+  );
 }
 
 export default App;
