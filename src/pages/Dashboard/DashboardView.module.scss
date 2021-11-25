@@ -1,0 +1,21 @@
+@import "src/styles/variables";
+
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: $darkBlueColor;
+  word-wrap: break-word;
+}
+
+.view {
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  flex: 1;
+
+  padding-bottom: 3%;
+
+  a {
+    text-decoration: none;
+  }
+}
