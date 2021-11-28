@@ -1,0 +1,93 @@
+@import "styles/variables";
+
+.clickableIcon {
+  cursor: pointer;
+}
+
+.container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: $darkBlueColor;
+  z-index: 10;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+.backArrow {
+  cursor: pointer;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    display: none;
+  }
+}
+
+.postSectionHeader {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: $darkBlueColor;
+}
+
+.postSectionWrapper {
+  padding-left: 5%;
+  padding-right: 5%;
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding-left: 0%;
+    padding-right: 0%;
+  }
+}
+
+.commentWrapper {
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 1%;
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    padding-left: 0%;
+    padding-right: 0%;
+    padding-bottom: 2%;
+  }
+}
+
+.commentsContainer {
+  padding-top: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.hamburger {
+  padding-left: 5px;
+}
+
+.arrowDown {
+  position: absolute;
+  z-index: 99;
+  top: 90%;
+  left: 90%;
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    left: 85%;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notLoading {
+  display: none;
+}

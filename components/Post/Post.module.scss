@@ -1,0 +1,54 @@
+@import "styles/variables";
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.post {
+  height: 95%;
+  padding: 10px 5px 10px 10px;
+  border: 1px solid $darkBlueColor;
+  border-radius: 10px;
+
+  background-color: $widgetColor;
+
+  &:hover {
+    border-color: $lightGrayColor;
+    cursor: pointer;
+  }
+}
+
+.thumbnail {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.thumbnailImg {
+  max-width: 40%;
+}
+
+.thumbnailTitle {
+  padding-left: 1%;
+}
+
+.previewWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.previewImg {
+  max-height: 500px;
+  max-width: 80%;
+  object-fit: contain;
+}
+
+.selectedPost {
+  border-color: $lightGrayColor;
+  border: 1px solid $darkBlueColor;
+}
