@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const { subreddit, after, limit } = req.query;
-  console.log(req.query);
+  console.log("posts query = " + JSON.stringify(req.query));
 
   const requestUrl = !subreddit
     ? `https://www.reddit.com/.json?after=${after}&limit=${limit}`

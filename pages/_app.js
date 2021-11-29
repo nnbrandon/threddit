@@ -1,94 +1,74 @@
-import { useState, useCallback, useEffect, memo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
 import "../styles/globals.scss";
-import styles from "../styles/_app.module.scss";
 
-import Navbar from "../components/Navbar/Navbar";
-import AddSubreddit from "../components/AddSubreddit/AddSubreddit";
-
-import { fetchSubreddits } from "../Reddit/SubredditService";
+import Layout from "../components/Layout/Layout";
 
 const ROUTES_TO_RETAIN = ["/", "/r/[subreddit]"];
+
+function RetainedComponent(props) {
+  const { Component } = props;
+  if (!Component) {
+    return <div></div>;
+  }
+  return <Component {...props} />;
+}
 
 function App({ Component, pageProps }) {
   const router = useRouter();
   const { pathname } = router; // pathname = dynamic route
-  const RetainedComponent = useRef(null);
+  const isRetainableRoute = ROUTES_TO_RETAIN.includes(pathname);
 
-  const [subreddits, setSubreddits] = useState([]);
-  const [showNavBar, setShowNavBar] = useState(true);
-  const [showAddSubreddit, setShowAddSubreddit] = useState(false);
+  const [showNavbar, setShowNavBar] = useState(true);
+  const [isHome, setIsHome] = useState(false);
 
-  const onClickPost = useCallback((subreddit) => {
-    console.log(subreddit);
-  }, []);
+  const ComponentRef = useRef(null);
 
-  const onClickNavItem = useCallback((subreddit) => {
-    RetainedComponent.current = null;
-  }, []);
-
-  const onClickNav = useCallback(() => {
-    setShowNavBar(!showNavBar);
-  }, [showNavBar, setShowNavBar]);
-
-  const fetch = useCallback(() => {
-    const subreddits = fetchSubreddits();
-    setSubreddits(subreddits);
-  }, []);
-
-  function onShowAddSubreddit() {
-    setShowAddSubreddit(!showAddSubreddit);
+  function releaseRetainedComponent() {
+    console.log("Releasing RetainedComponent");
+    ComponentRef.current = null;
   }
 
-  useEffect(() => {
-    fetch();
-  }, [fetch]);
+  function updateIsHome(home) {
+    setIsHome(home);
+  }
 
-  const isRetainableRoute = ROUTES_TO_RETAIN.includes(pathname);
-  // Set component for retainedComponent if we haven't got it already
-  if (isRetainableRoute && !RetainedComponent.current) {
-    const MemoComponent = memo(Component);
-    RetainedComponent.current = (
-      <MemoComponent
-        {...pageProps}
-        onClickPost={onClickPost}
-        onClickNav={onClickNav}
-        isNavBarShowing={showNavBar}
-        refreshSubreddit={fetch}
-      />
-    );
+  function onClickNav() {
+    setShowNavBar(!showNavbar);
+  }
+
+  // Set component for RetainedComponent
+  if (isRetainableRoute) {
+    console.log("Setting ComponentRef to " + Component.name);
+    ComponentRef.current = Component;
   }
 
   return (
-    <main className={styles.container}>
-      {showAddSubreddit && (
-        <AddSubreddit
-          onClose={onShowAddSubreddit}
-          fetchSubreddits={fetchSubreddits}
-        />
-      )}
-      {showNavBar && (
-        <Navbar
-          navData={subreddits}
+    <Layout
+      showNavbar={showNavbar}
+      releaseRetainedComponent={releaseRetainedComponent}
+      isHome={isHome}
+      onClickNav={onClickNav}
+    >
+      <RetainedComponent
+        {...pageProps}
+        Component={ComponentRef.current}
+        isHome={isHome}
+        showNavbar={showNavbar}
+        updateIsHome={updateIsHome}
+        onClickNav={onClickNav}
+      />
+      {!isRetainableRoute && (
+        <Component
+          {...pageProps}
+          isHome={isHome}
+          showNavbar={showNavbar}
+          updateIsHome={updateIsHome}
           onClickNav={onClickNav}
-          onShowAddSubreddit={onShowAddSubreddit}
-          onClickNavItem={onClickNavItem}
         />
       )}
-      <div className={styles.view}>
-        {RetainedComponent.current}
-        {!isRetainableRoute && (
-          <Component
-            {...pageProps}
-            onClickPost={onClickPost}
-            onClickNav={onClickNav}
-            isNavBarShowing={showNavBar}
-            refreshSubreddit={fetch}
-          />
-        )}
-      </div>
-    </main>
+    </Layout>
   );
 }
 

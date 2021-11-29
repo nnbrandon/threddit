@@ -5,6 +5,10 @@ import he from "he";
 import styles from "./Comment.module.scss";
 
 function PostSection({ post }) {
+  if (!post) {
+    return <div></div>;
+  }
+
   const { title, score, num_comments } = post;
   const prefixedAuthor = post.getPrefixedAuthor();
   const date = post.timeSince();

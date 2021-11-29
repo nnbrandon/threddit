@@ -18,23 +18,22 @@ function Navbar({
   const { subreddit } = router.query;
   const [inputSubreddit, setInputSubreddit] = useState("");
 
-  let isMobile;
-  if (typeof window !== "undefined") {
-    // Client-side-only code
-    isMobile = window.screen.width >= 320 && window.screen.width <= 480;
+  function onClickItem() {
+    const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
+    onClickNavItem();
+    if (isMobile) {
+      onClickNav();
+    }
   }
 
   const renderNavData = navData.map((data, index) => {
     return (
-      <li key={index}>
-        <Link href={data.path}>
+      <li key={index} onClick={onClickItem}>
+        <Link href={data.path} passHref>
           <a
             className={
               !isHome && subreddit === data.text ? styles.selected : ""
             }
-            onClick={() => {
-              onClickItem(data.text);
-            }}
           >
             {data.text}
           </a>
@@ -42,13 +41,6 @@ function Navbar({
       </li>
     );
   });
-
-  function onClickItem(sreddit) {
-    onClickNavItem(sreddit);
-    if (isMobile) {
-      onClickNav();
-    }
-  }
 
   function onChangeSubreddit(id, value) {
     setInputSubreddit(value);
@@ -84,16 +76,11 @@ function Navbar({
           />
         </form>
         <ul>
-          <Link href="/">
-            <a
-              className={isHome ? styles.selected : ""}
-              onClick={() => {
-                onClickItem("");
-              }}
-            >
-              Home
-            </a>
-          </Link>
+          <li key="home" onClick={onClickItem}>
+            <Link style={{ cursor: "pointer" }} href="/" passHref>
+              <a className={isHome ? styles.selected : ""}>Home</a>
+            </Link>
+          </li>
           {renderNavData}
         </ul>
       </nav>

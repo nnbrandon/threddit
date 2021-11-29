@@ -5,8 +5,7 @@ import { RedditPost } from "./RedditPost";
 export async function fetchComments(url, fetchPost) {
   let result;
   try {
-    result = await axios.get(`${url}?limit=50`);
-    console.log(result);
+    result = await axios.get(url);
     if (result.status !== 200) {
       throw new Error("Unable to fetch comments");
     }
@@ -15,12 +14,7 @@ export async function fetchComments(url, fetchPost) {
   }
 
   if (result && result.data) {
-    let post;
-    if (fetchPost) {
-      post = new RedditPost(result.data[0].data.children[0].data); // TODO: Fix hack
-    }
-
-    const commentsObject = result.data[1];
+    const { post, comments: commentsObject } = result.data;
     if (!commentsObject) {
       throw new Error("Unable to fetch comments");
     }
@@ -32,7 +26,7 @@ export async function fetchComments(url, fetchPost) {
     const { children } = data;
     const comments = flattenComments(children);
     return {
-      post,
+      post: post ? new RedditPost(post) : null,
       comments,
     };
   }

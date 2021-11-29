@@ -26,15 +26,22 @@ function isSubscribed() {
   return false;
 }
 
-function PostList({ isHome, onClickNav, isNavBarShowing, refreshSubreddit }) {
+function PostList({
+  isHome,
+  showNavbar,
+  onClickNav,
+  subreddit,
+  refreshSubreddit,
+}) {
   const router = useRouter();
-  const { subreddit: querySubreddit, postId } = router.query; // postId is used to make sure to not fetch posts in comments page
-  const path = router.asPath;
-
-  const [subreddit, setSubreddit] = useState(querySubreddit);
   const virtuosoRef = useRef(null);
 
   const getKey = (pageIndex, previousPageData) => {
+    // Do not make calls if subreddit is not defined and not on Home page
+    if (!isHome && !subreddit) {
+      return null;
+    }
+
     // reached the end
     if (previousPageData && !previousPageData.nextAfter) return null;
 
@@ -61,25 +68,19 @@ function PostList({ isHome, onClickNav, isNavBarShowing, refreshSubreddit }) {
         }
       }
     }
+    console.log(posts);
     return posts;
   }, [data]);
 
   useEffect(() => {
-    // Router query is not ready ...
-    if ((!isHome && !querySubreddit) || path === "/r/[subreddit]" || postId)
-      return;
-
-    // Subreddit has changed within PostList
-    if (querySubreddit !== subreddit) {
-      setSubreddit(querySubreddit);
-      if (virtuosoRef.current) {
-        console.log("scrolling to top");
-        virtuosoRef.current.scrollTo({
-          top: 0,
-        });
-      }
+    console.log(subreddit);
+    if (virtuosoRef.current) {
+      console.log("scrolling to top");
+      virtuosoRef.current.scrollTo({
+        top: 0,
+      });
     }
-  }, [querySubreddit, path, postId, subreddit, isHome]);
+  }, [subreddit]);
 
   useEffect(() => {
     router.prefetch("/r/[subreddit]/comments/[postId]");
@@ -119,16 +120,12 @@ function PostList({ isHome, onClickNav, isNavBarShowing, refreshSubreddit }) {
     [redditPosts, isHome]
   );
 
-  const subredditText = !querySubreddit ? (
-    <div>Home</div>
-  ) : (
-    <div>{querySubreddit}</div>
-  );
+  const subredditText = !subreddit ? <div>Home</div> : <div>{subreddit}</div>;
   return (
     <div className={styles.container}>
       <div className={styles.posts}>
         <div className={styles.subredditText}>
-          {!isNavBarShowing && (
+          {!showNavbar && (
             <span className={styles.hamburger}>
               <GiHamburgerMenu onClick={onClickNav} size="30px" />
             </span>
@@ -139,7 +136,7 @@ function PostList({ isHome, onClickNav, isNavBarShowing, refreshSubreddit }) {
         </div>
         <Virtuoso
           ref={virtuosoRef}
-          style={{ height: "93vh", width: "100%" }}
+          style={{ height: "97%", width: "100%" }}
           data={redditPosts}
           endReached={onLoadMore}
           increaseViewportBy={{

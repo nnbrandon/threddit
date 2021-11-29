@@ -22,6 +22,10 @@ export function fetchSubreddits() {
 
   return [
     {
+      path: "/r/nextjs",
+      text: "nextjs",
+    },
+    {
       path: "/r/amcstock",
       text: "amcstock",
     },
@@ -32,6 +36,18 @@ export function fetchSubreddits() {
     {
       path: "/r/leagueoflegends",
       text: "leagueoflegends",
+    },
+    {
+      path: "/r/Superstonk",
+      text: "Superstonk",
+    },
+    {
+      path: "/r/news",
+      text: "news",
+    },
+    {
+      path: "/r/wallstreetbets",
+      text: "wallstreetbets",
     },
   ];
   // return sortedSubreddits;

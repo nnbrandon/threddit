@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import {
   IoIosArrowBack,
   IoIosClose,
@@ -12,6 +11,7 @@ import { Virtuoso } from "react-virtuoso";
 
 import styles from "./[postId].module.scss";
 
+import Layout from "../../../../components/Layout/Layout";
 import CommentPostSection from "../../../../components/Comments/CommentPostSection";
 import Comment from "../../../../components/Comments/Comment";
 import Spinner from "../../../../components/Spinner/Spinner";
@@ -19,16 +19,42 @@ import Spinner from "../../../../components/Spinner/Spinner";
 import { fetchComments } from "../../../../Reddit/RedditCommentService";
 import { RedditPost } from "../../../../Reddit/RedditPost";
 
-function getCommentsUrlJSON(subreddit, postId) {
-  return `https://www.reddit.com/r/${subreddit}/comments/${postId}.json`;
+function getCommentsUrlJSON(subreddit, postId, fetchPost, limit) {
+  return `/api/comments?subreddit=${subreddit}&postId=${postId}&fetchPost=${fetchPost}&limit=${limit}`;
 }
 
-function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
+export async function getServerSideProps(context) {
+  const { subreddit, postId } = context.params;
+  // https://api.reddit.com/r/gaming/api/info/?id=t3_r2ng9l
+  const requestUrl = `https://reddit.com/r/${subreddit}/api/info.json?id=t3_${postId}`;
+  let selectedPost = null;
+
+  try {
+    const response = await fetch(requestUrl);
+    const jsonResult = await response.json();
+    const { children } = jsonResult.data;
+    selectedPost = children[0].data;
+  } catch (err) {
+    console.error(err);
+  }
+
+  return {
+    props: {
+      selectedPost,
+    }, // will be passed to the page component as props
+  };
+}
+
+function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
   const router = useRouter();
   const { postId, subreddit } = router.query;
+
   const [comments, setComments] = useState([]);
-  const [post, setPost] = useState(new RedditPost(selectedPost));
+  const [post, setPost] = useState(
+    selectedPost ? new RedditPost(selectedPost) : undefined
+  );
   const [loading, setLoading] = useState(false);
+
   const virtuosoRef = useRef(null);
   const commentIndexRef = useRef({
     startIndex: 0,
@@ -38,7 +64,11 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
   const didFirstClick = useRef(false);
 
   const onCloseComments = useCallback(() => {
-    router.back();
+    if (isHome) {
+      router.push("/");
+    } else {
+      router.push(`/r/${subreddit}`);
+    }
   }, [router]);
 
   const handleKeydown = useCallback(
@@ -58,17 +88,22 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
   }, [handleKeydown, router]);
 
   useEffect(() => {
-    async function fetch() {
-      const commentsUrlJSON = getCommentsUrlJSON(subreddit, postId);
+    async function fetch(subreddit, postId, fetchPost, limit) {
+      const commentsUrlJSON = getCommentsUrlJSON(
+        subreddit,
+        postId,
+        fetchPost,
+        limit
+      );
       setLoading(true);
       try {
         const { post, comments } = await fetchComments(
           commentsUrlJSON,
-          !selectedPost
+          fetchPost
         );
 
-        if (!selectedPost) {
-          setPost(post);
+        if (post) {
+          setPost(new RedditPost(post));
         }
         setComments(comments);
         setLoading(false);
@@ -77,7 +112,8 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
       }
     }
 
-    fetch(subreddit, postId);
+    console.log("will fetch post = " + !selectedPost);
+    fetch(subreddit, postId, !selectedPost, 25);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subreddit, postId]);
 
@@ -122,7 +158,7 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
     }
   }
 
-  const backArrow = isNavBarShowing ? (
+  const backArrow = showNavbar ? (
     <IoIosArrowBack
       className={styles.backArrow}
       alt="Back"
@@ -153,20 +189,25 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>{selectedPost && selectedPost.title}</title>
+        <title>{post && post.title}</title>
         <meta
           property="og:title"
-          content={`${selectedPost && selectedPost.title}`}
+          content={`${post && post.title}`}
           key="title"
+        />
+        <meta
+          name="description"
+          content={`${post && post.text}`}
+          key="description"
         />
       </Head>
       <div className={styles.postSectionHeader}>
         <span className={styles.hamburger}>
-          {!isNavBarShowing && (
+          {!showNavbar && (
             <GiHamburgerMenu
               className={styles.clickableIcon}
               size="30px"
-              onClick={onCloseComments}
+              onClick={onClickNav}
             />
           )}
           {backArrow}
@@ -211,28 +252,6 @@ function CommentsOverview({ selectedPost, onClickNav, isNavBarShowing }) {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { subreddit, postId } = context.params;
-  // https://api.reddit.com/r/gaming/api/info/?id=t3_r2ng9l
-  const requestUrl = `https://api.reddit.com/r/${subreddit}/api/info/?id=t3_${postId}`;
-  let selectedPost = null;
-
-  try {
-    const response = await fetch(requestUrl);
-    const jsonResult = await response.json();
-    const { children } = jsonResult.data;
-    selectedPost = children[0].data;
-  } catch (err) {
-    console.error(err);
-  }
-
-  return {
-    props: {
-      selectedPost,
-    }, // will be passed to the page component as props
-  };
 }
 
 export default CommentsOverview;
