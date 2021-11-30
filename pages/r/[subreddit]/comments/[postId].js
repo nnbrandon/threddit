@@ -16,8 +16,12 @@ import CommentPostSection from "../../../../components/Comments/CommentPostSecti
 import Comment from "../../../../components/Comments/Comment";
 import Spinner from "../../../../components/Spinner/Spinner";
 
-import { fetchComments } from "../../../../Reddit/RedditCommentService";
+import {
+  fetchComments,
+  fetchMoreChildren,
+} from "../../../../Reddit/RedditCommentService";
 import { RedditPost } from "../../../../Reddit/RedditPost";
+import More from "../../../../components/Comments/More";
 
 function getCommentsUrlJSON(subreddit, postId, fetchPost, limit) {
   return `/api/comments?subreddit=${subreddit}&postId=${postId}&fetchPost=${fetchPost}&limit=${limit}`;
@@ -53,6 +57,7 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
   const [post, setPost] = useState(
     selectedPost ? new RedditPost(selectedPost) : undefined
   );
+  const [infiniteMore, setInfiniteMore] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
   const virtuosoRef = useRef(null);
@@ -87,6 +92,36 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
     };
   }, [handleKeydown, router]);
 
+  async function onClickLoadMore(more, index) {
+    const { parent_id, children } = more;
+    const childrenQuery = children.join();
+
+    const { comments: moreComments } = await fetchMoreChildren(
+      `/api/comments/more?children=${childrenQuery}&postId=t3_${postId}&limit_children=true&parent_id=${parent_id}`
+    );
+    comments.splice(index, 1, ...moreComments);
+    setComments([...comments]);
+  }
+
+  async function infiniteLoadMore() {
+    if (infiniteMore && infiniteMore.children.length) {
+      // query the next 25 comments
+      const children = infiniteMore.children.splice(0, 25);
+      if (children.length) {
+        const childrenQuery = children.join();
+
+        setLoading(true);
+        const { comments: moreComments } = await fetchMoreChildren(
+          `/api/comments/more?children=${childrenQuery}&postId=${infiniteMore.parent_id}&limit_children=true`
+        );
+        if (moreComments.length) {
+          setComments([...comments, ...moreComments]);
+          setLoading(false);
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     async function fetch(subreddit, postId, fetchPost, limit) {
       const commentsUrlJSON = getCommentsUrlJSON(
@@ -97,7 +132,7 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
       );
       setLoading(true);
       try {
-        const { post, comments } = await fetchComments(
+        const { post, comments, infiniteMore } = await fetchComments(
           commentsUrlJSON,
           fetchPost
         );
@@ -105,6 +140,11 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
         if (post) {
           setPost(new RedditPost(post));
         }
+
+        if (infiniteMore) {
+          setInfiniteMore(infiniteMore);
+        }
+
         setComments(comments);
         setLoading(false);
       } catch (err) {
@@ -179,11 +219,24 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
   // Render a Comment
   const RenderedComment = (index) => {
     const comment = comments[index];
-    return (
-      <div className={styles.commentWrapper}>
-        <Comment key={comment.id} comment={comment} />
-      </div>
-    );
+    if (comment.kind === "more") {
+      return (
+        <div className={styles.commentWrapper}>
+          <More
+            key={index}
+            more={comment}
+            index={index}
+            onClickLoadMore={onClickLoadMore}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles.commentWrapper}>
+          <Comment key={comment.id} comment={comment} />
+        </div>
+      );
+    }
   };
 
   return (
@@ -235,6 +288,7 @@ function CommentsOverview({ showNavbar, onClickNav, selectedPost, isHome }) {
           ref={virtuosoRef}
           rangeChanged={setCommentsRange}
           style={{ height: "93vh", width: "100%" }}
+          endReached={infiniteLoadMore}
           data={comments}
           itemContent={RenderedComment}
           components={{

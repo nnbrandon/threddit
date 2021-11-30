@@ -1,5 +1,6 @@
 export class RedditComment {
-  constructor(data) {
+  constructor(kind, data) {
+    this.kind = kind;
     this.author = data.author;
     this.created_utc = data.created_utc;
     this.body = data.body;
@@ -44,5 +45,16 @@ export class RedditComment {
       return Math.floor(interval) + " minutes ago";
     }
     return Math.floor(seconds) + " seconds ago";
+  }
+}
+
+export class RedditCommentMore {
+  constructor(kind, data) {
+    this.kind = kind;
+    this.count = data.count;
+    this.name = data.name;
+    this.parent_id = data.parent_id;
+    this.children = data.children;
+    this.depth = data.depth;
   }
 }

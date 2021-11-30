@@ -1,8 +1,8 @@
 import axios from "axios";
-import { RedditComment } from "./RedditComment";
+import { RedditComment, RedditCommentMore } from "./RedditComment";
 import { RedditPost } from "./RedditPost";
 
-export async function fetchComments(url, fetchPost) {
+export async function fetchComments(url) {
   let result;
   try {
     result = await axios.get(url);
@@ -25,8 +25,42 @@ export async function fetchComments(url, fetchPost) {
 
     const { children } = data;
     const comments = flattenComments(children);
+
+    let infiniteMore;
+    if (comments.length) {
+      const lastElement = comments[comments.length - 1];
+      if (lastElement.kind === "more" && lastElement.depth === 0) {
+        infiniteMore = comments.pop();
+      }
+    }
+
     return {
       post: post ? new RedditPost(post) : null,
+      comments,
+      infiniteMore,
+    };
+  }
+}
+
+export async function fetchMoreChildren(url) {
+  let result;
+  try {
+    result = await axios.get(url);
+    if (result.status !== 200) {
+      throw new Error("Unable to fetch comments");
+    }
+  } catch (err) {
+    throw new Error("Unable to fetch comments");
+  }
+
+  if (result && result.data) {
+    const { comments: children } = result.data;
+    if (!children.length) {
+      throw new Error("Unable to fetch comments");
+    }
+
+    const comments = flattenComments(children);
+    return {
       comments,
     };
   }
@@ -34,8 +68,14 @@ export async function fetchComments(url, fetchPost) {
 
 function flattenComments(childrenArr) {
   return childrenArr.reduce((accum, current) => {
-    const { data } = current;
-    const comment = new RedditComment(data);
+    const { kind, data } = current;
+    let comment;
+    if (kind === "more") {
+      comment = new RedditCommentMore(kind, data);
+    } else {
+      comment = new RedditComment(kind, data);
+    }
+
     if (data.replies) {
       const { children } = data.replies.data;
       const flattenedReplies = flattenComments(children);
@@ -44,6 +84,7 @@ function flattenComments(childrenArr) {
     } else {
       accum.push(comment);
     }
+
     return accum;
   }, []);
 }

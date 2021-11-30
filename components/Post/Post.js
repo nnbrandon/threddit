@@ -48,12 +48,12 @@ function Post({ onClickPost, isHome, post, index }) {
             alt=""
             loading="eager"
           />
-          <h3 className={styles.thumbnailTitle}>{title}</h3>
+          <h3 className={styles.thumbnailTitle}>{he.decode(title)}</h3>
         </div>
       </Fragment>
     );
   } else {
-    postContent = <h3>{title}</h3>;
+    postContent = <h3>{he.decode(title)}</h3>;
   }
 
   const subredditSection = isHome ? post.subreddit_name_prefixed : undefined;
