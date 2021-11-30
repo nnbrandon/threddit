@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { Fragment } from "react";
 import Link from "next/link";
+import he from "he";
+
 import styles from "./Post.module.scss";
 
 function Post({ onClickPost, isHome, post, index }) {
@@ -20,7 +22,7 @@ function Post({ onClickPost, isHome, post, index }) {
     const { height, width, url } = previewSource;
     postContent = (
       <Fragment>
-        <h3>{title}</h3>
+        <h3>{he.decode(title)}</h3>
         <div className={styles.previewWrapper}>
           <img
             className={styles.previewImg}

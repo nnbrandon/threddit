@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     jsonResult = await response.json();
   } catch (err) {
     console.error(err);
-    res.stats(500).send(`Unable to fetch comments for ${postId}`);
+    res.status(500).send(`Unable to fetch comments for ${postId}`);
   }
 
   switch (status) {

@@ -37,7 +37,7 @@ function PostSection({ post }) {
       <div>
         r/{post.subreddit} Posted by {prefixedAuthor} {date}
       </div>
-      <h3>{title}</h3>
+      <h3>{he.decode(title)}</h3>
       {url}
       <br />
       <div className={styles.postSectionPreview}>{preview}</div>
@@ -45,7 +45,6 @@ function PostSection({ post }) {
         className={styles.textHtml}
         dangerouslySetInnerHTML={{ __html: text }}
       />
-
       <br />
       <div>
         {score} score | {num_comments} comments
