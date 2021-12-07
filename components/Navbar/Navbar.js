@@ -7,20 +7,13 @@ import styles from "./Navbar.module.scss";
 import Button from "../Button/Button";
 import TextInput from "../TextInput/TextInput";
 
-function Navbar({
-  isHome,
-  navData,
-  onClickNav,
-  onClickNavItem,
-  onShowAddSubreddit,
-}) {
+function Navbar({ isHome, navData, onClickNav, onShowAddSubreddit }) {
   const router = useRouter();
   const { subreddit } = router.query;
   const [inputSubreddit, setInputSubreddit] = useState("");
 
   function onClickItem() {
     const isMobile = window.screen.width >= 320 && window.screen.width <= 480;
-    onClickNavItem();
     if (isMobile) {
       onClickNav();
     }

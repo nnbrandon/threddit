@@ -55,9 +55,6 @@ export async function fetchMoreChildren(url) {
 
   if (result && result.data) {
     const { comments: children } = result.data;
-    if (!children.length) {
-      throw new Error("Unable to fetch comments");
-    }
 
     const comments = flattenComments(children);
     return {

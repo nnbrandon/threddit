@@ -22,9 +22,16 @@ function PostSection({ post }) {
   ) : undefined;
   const preview = previewSource ? (
     <div className={styles.previewImageWrapper}>
-      <Image
+      {/* <Image
         objectFit="contain"
         layout="fill"
+        src={previewSource.url}
+        alt=""
+        loading="eager"
+      /> */}
+      <Image
+        height={previewSource.height}
+        width={previewSource.width}
         src={previewSource.url}
         alt=""
         loading="eager"
@@ -40,11 +47,11 @@ function PostSection({ post }) {
       <h3>{he.decode(title)}</h3>
       {url}
       <br />
-      <div className={styles.postSectionPreview}>{preview}</div>
       <div
         className={styles.textHtml}
         dangerouslySetInnerHTML={{ __html: text }}
       />
+      <div className={styles.postSectionPreview}>{preview}</div>
       <br />
       <div>
         {score} score | {num_comments} comments

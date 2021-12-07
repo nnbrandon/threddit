@@ -1,34 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
 import "../styles/globals.scss";
 
 import Layout from "../components/Layout/Layout";
 
-const ROUTES_TO_RETAIN = ["/", "/r/[subreddit]"];
-
-function RetainedComponent(props) {
-  const { Component } = props;
-  if (!Component) {
-    return <div></div>;
-  }
-  return <Component {...props} />;
-}
+const SPA_ROUTES = ["/", "/r/[subreddit]"];
 
 function App({ Component, pageProps }) {
   const router = useRouter();
   const { pathname } = router; // pathname = dynamic route
-  const isRetainableRoute = ROUTES_TO_RETAIN.includes(pathname);
+  const isSPARoute = SPA_ROUTES.includes(pathname);
 
   const [showNavbar, setShowNavBar] = useState(true);
   const [isHome, setIsHome] = useState(false);
-
-  const ComponentRef = useRef(null);
-
-  function releaseRetainedComponent() {
-    console.log("Releasing RetainedComponent");
-    ComponentRef.current = null;
-  }
 
   function updateIsHome(home) {
     setIsHome(home);
@@ -38,29 +23,11 @@ function App({ Component, pageProps }) {
     setShowNavBar(!showNavbar);
   }
 
-  // Set component for RetainedComponent
-  if (isRetainableRoute) {
-    console.log("Setting ComponentRef to " + Component.name);
-    ComponentRef.current = Component;
-  }
-
-  return (
-    <Layout
-      showNavbar={showNavbar}
-      releaseRetainedComponent={releaseRetainedComponent}
-      isHome={isHome}
-      onClickNav={onClickNav}
-    >
-      <RetainedComponent
-        {...pageProps}
-        Component={ComponentRef.current}
-        isHome={isHome}
-        showNavbar={showNavbar}
-        updateIsHome={updateIsHome}
-        onClickNav={onClickNav}
-      />
-      {!isRetainableRoute && (
+  const component = isSPARoute ? (
+    <div suppressHydrationWarning>
+      {typeof window === "undefined" ? null : (
         <Component
+          key={router.asPath}
           {...pageProps}
           isHome={isHome}
           showNavbar={showNavbar}
@@ -68,6 +35,21 @@ function App({ Component, pageProps }) {
           onClickNav={onClickNav}
         />
       )}
+    </div>
+  ) : (
+    <Component
+      key={router.asPath}
+      {...pageProps}
+      isHome={isHome}
+      showNavbar={showNavbar}
+      updateIsHome={updateIsHome}
+      onClickNav={onClickNav}
+    />
+  );
+
+  return (
+    <Layout showNavbar={showNavbar} isHome={isHome} onClickNav={onClickNav}>
+      {component}
     </Layout>
   );
 }

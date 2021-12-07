@@ -113,9 +113,18 @@
 }
 
 .previewImageWrapper {
-  height: 500px;
-  width: 80%;
+  // height: 500px;
+  // width: 100%;
+  // position: relative;
+
+  // @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  //   max-height: 500px;
+  // }
+  display: flex;
   position: relative;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 .textHtml {

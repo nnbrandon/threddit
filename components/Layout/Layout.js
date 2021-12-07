@@ -6,13 +6,7 @@ import Navbar from "../Navbar/Navbar";
 import AddSubreddit from "../AddSubreddit/AddSubreddit";
 import { fetchSubreddits } from "../../Reddit/SubredditService";
 
-function Layout({
-  children,
-  releaseRetainedComponent,
-  isHome,
-  showNavbar,
-  onClickNav,
-}) {
+function Layout({ children, isHome, showNavbar, onClickNav }) {
   const [subreddits, setSubreddits] = useState([]);
   const [showAddSubreddit, setShowAddSubreddit] = useState(false);
 
@@ -43,7 +37,6 @@ function Layout({
           navData={subreddits}
           onClickNav={onClickNav}
           onShowAddSubreddit={onShowAddSubreddit}
-          onClickNavItem={releaseRetainedComponent}
         />
       )}
       <main className={styles.view}>{children}</main>

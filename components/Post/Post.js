@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { Fragment } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
+import Image from "next/image";
 import he from "he";
 
 import styles from "./Post.module.scss";
@@ -24,13 +25,12 @@ function Post({ onClickPost, isHome, post, index }) {
       <Fragment>
         <h3>{he.decode(title)}</h3>
         <div className={styles.previewWrapper}>
-          <img
-            className={styles.previewImg}
-            src={url}
-            height={height}
+          <Image
             width={width}
-            alt=""
-            loading="eager"
+            height={height}
+            src={url}
+            quality="5"
+            priority={height > 500}
           />
         </div>
       </Fragment>
@@ -46,7 +46,6 @@ function Post({ onClickPost, isHome, post, index }) {
             width={width}
             height={height}
             alt=""
-            loading="eager"
           />
           <h3 className={styles.thumbnailTitle}>{he.decode(title)}</h3>
         </div>
@@ -59,17 +58,20 @@ function Post({ onClickPost, isHome, post, index }) {
   const subredditSection = isHome ? post.subreddit_name_prefixed : undefined;
 
   return (
-    <article className={styles.post} onClick={onClickPost}>
-      <Link href={commentsPath}>
-        <a className={styles.link}>
-          <div>
-            {subredditSection} Posted by {prefixedAuthor} {date}
-          </div>
-          {postContent}
-          <div>
-            {score} score | {num_comments} comments
-          </div>
-        </a>
+    <article
+      className={styles.post}
+      onClick={() => {
+        onClickPost(post);
+      }}
+    >
+      <Link className={styles.link} to={commentsPath}>
+        <div>
+          {subredditSection} Posted by {prefixedAuthor} {date}
+        </div>
+        {postContent}
+        <div>
+          {score} score | {num_comments} comments
+        </div>
       </Link>
     </article>
   );

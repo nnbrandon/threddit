@@ -1,0 +1,16 @@
+@import "styles/variables";
+
+.subredditView {
+  display: flex;
+  position: relative;
+}
+
+.postList {
+  flex: 1;
+}
+
+.subredditInfoColumn {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}

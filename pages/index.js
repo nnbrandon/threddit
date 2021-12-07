@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import PostList from "../components/PostList/PostList";
 
 function HomePage({ showNavbar, updateIsHome, onClickNav }) {
@@ -6,14 +7,26 @@ function HomePage({ showNavbar, updateIsHome, onClickNav }) {
     updateIsHome(true);
   }, []);
 
+  const RenderPostList = useCallback(
+    (props) => {
+      return (
+        <PostList
+          {...props}
+          id="home"
+          isHome
+          subreddit=""
+          showNavbar={showNavbar}
+          onClickNav={onClickNav}
+        />
+      );
+    },
+    [showNavbar, onClickNav]
+  );
+
   return (
-    <PostList
-      id="home"
-      isHome
-      subreddit=""
-      showNavbar={showNavbar}
-      onClickNav={onClickNav}
-    />
+    <Router>
+      <Route path="/" render={RenderPostList} />
+    </Router>
   );
 }
 

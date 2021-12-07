@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from "react";
-import { useRouter } from "next/router";
+import React, { useCallback, useState, useRef, useMemo } from "react";
+import { Route } from "react-router";
 import { IoHeartSharp, IoHeartOutline } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Virtuoso } from "react-virtuoso";
@@ -17,6 +11,7 @@ import Post from "../Post/Post";
 import Spinner from "../Spinner/Spinner";
 
 import { fetchPosts } from "../../Reddit/RedditPostService";
+import CommentListWrapper from "../CommentList_SPA/CommentList_SPA";
 
 function addSubreddit() {}
 
@@ -33,7 +28,7 @@ function PostList({
   subreddit,
   refreshSubreddit,
 }) {
-  const router = useRouter();
+  const [selectedPost, setSelectedPost] = useState(undefined);
   const virtuosoRef = useRef(null);
 
   const getKey = (pageIndex, previousPageData) => {
@@ -72,27 +67,13 @@ function PostList({
     return posts;
   }, [data]);
 
-  useEffect(() => {
-    console.log(subreddit);
-    if (virtuosoRef.current) {
-      console.log("scrolling to top");
-      virtuosoRef.current.scrollTo({
-        top: 0,
-      });
-    }
-  }, [subreddit]);
-
-  useEffect(() => {
-    router.prefetch("/r/[subreddit]/comments/[postId]");
-  }, [router]);
-
   const onLoadMore = () => {
     setSize(size + 2);
   };
 
   const viewPortHeight = () => {
     if (typeof window !== "undefined") {
-      return window.innerHeight / 2;
+      return window.innerHeight;
     }
 
     return 500;
@@ -108,22 +89,51 @@ function PostList({
     fetchSubreddits();
   }
 
+  function onClickPost(post) {
+    setSelectedPost(post);
+  }
+
   const RenderedPost = useCallback(
     (index) => {
       const post = redditPosts[index];
       return (
         <div className={styles.postWrapper}>
-          <Post isHome={isHome} key={post.id} post={post} index={index} />
+          <Post
+            isHome={isHome}
+            key={post.id}
+            post={post}
+            index={index}
+            onClickPost={onClickPost}
+          />
         </div>
       );
     },
     [redditPosts, isHome]
   );
 
+  const RenderCommentList = useCallback(
+    (props) => {
+      return (
+        <CommentListWrapper
+          {...props}
+          selectedPost={selectedPost}
+          showNavbar={showNavbar}
+          onClickNav={onClickNav}
+          isHome={isHome}
+        />
+      );
+    },
+    [selectedPost, showNavbar, onClickNav, isHome]
+  );
+
   const subredditText = !subreddit ? <div>Home</div> : <div>{subreddit}</div>;
   return (
     <div className={styles.container}>
       <div className={styles.posts}>
+        <Route
+          path={"/r/:subreddit/comments/:postId"}
+          render={RenderCommentList}
+        />
         <div className={styles.subredditText}>
           {!showNavbar && (
             <span className={styles.hamburger}>

@@ -9,7 +9,6 @@
 }
 
 .post {
-  height: 95%;
   padding: 10px 5px 10px 10px;
   border: 1px solid $darkBlueColor;
   border-radius: 10px;
@@ -39,12 +38,24 @@
   display: flex;
   flex: 1;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  max-height: 500px;
+  // max-width: 90%;
+  overflow: hidden;
+}
+
+.previewMaxImg {
+  max-height: 500px;
+  max-width: 100%;
+  object-fit: contain;
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    max-height: 500px;
+  }
 }
 
 .previewImg {
-  max-height: 500px;
-  max-width: 80%;
+  max-width: 100%;
   object-fit: contain;
 }
 
