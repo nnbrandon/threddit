@@ -36,7 +36,7 @@ function SubredditPostsPage({ showNavbar, updateIsHome, onClickNav }) {
     <Router>
       <div className={styles.subredditView}>
         <Route path="/" render={RenderPostList} />
-        <div className={styles.subredditInfoColumn}>test hi</div>
+        {/* <div className={styles.subredditInfoColumn}>test hi</div> */}
       </div>
     </Router>
   );

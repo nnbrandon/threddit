@@ -22,20 +22,21 @@ function PostSection({ post }) {
   ) : undefined;
   const preview = previewSource ? (
     <div className={styles.previewImageWrapper}>
-      {/* <Image
+      <Image
         objectFit="contain"
         layout="fill"
         src={previewSource.url}
         alt=""
         loading="eager"
-      /> */}
-      <Image
+        quality="100"
+      />
+      {/* <Image
         height={previewSource.height}
         width={previewSource.width}
         src={previewSource.url}
         alt=""
         loading="eager"
-      />
+      /> */}
     </div>
   ) : undefined;
 

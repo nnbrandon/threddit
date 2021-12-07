@@ -21,18 +21,33 @@ function Post({ onClickPost, isHome, post, index }) {
   }
   if (previewSource && !useThumbnail) {
     const { height, width, url } = previewSource;
-    postContent = (
-      <Fragment>
-        <h3>{he.decode(title)}</h3>
+    const preview =
+      height > 500 ? (
+        <div className={styles.previewBigWrapper}>
+          <Image
+            objectFit="contain"
+            layout="fill"
+            src={previewSource.url}
+            alt=""
+            quality="25"
+            priority
+          />
+        </div>
+      ) : (
         <div className={styles.previewWrapper}>
           <Image
             width={width}
             height={height}
             src={url}
-            quality="5"
-            priority={height > 500}
+            quality="25"
+            priority
           />
         </div>
+      );
+    postContent = (
+      <Fragment>
+        <h3>{he.decode(title)}</h3>
+        {preview}
       </Fragment>
     );
   } else if (post.thumbnail) {
